@@ -136,6 +136,15 @@ details[open] .ln::after{content:" ▴"}
 .recap .edit{margin-left:auto;border:0;background:transparent;color:var(--accent);font:inherit;font-weight:600;cursor:pointer;padding:4px 0}
 .tbcount{font-weight:500;font-variant-numeric:tabular-nums}
 .wrap{padding-bottom:110px !important}
+.favonly{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--ice);cursor:pointer}
+.favonly input{position:absolute;opacity:0;width:1px;height:1px}
+.favonly .sw{flex:none;width:48px;height:28px;border-radius:14px;background:var(--line);position:relative;transition:background .15s}
+.favonly .sw::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .15s}
+.favonly input:checked+.sw{background:#1E8E4E}
+.favonly input:checked+.sw::after{transform:translateX(20px)}
+.favonly input:focus-visible+.sw{outline:3px solid var(--accent);outline-offset:2px}
+.fo-txt{display:flex;flex-direction:column;gap:2px;font-size:14px;color:var(--muted)}
+.fo-txt b{font-size:16px;color:var(--ink)}
 .srclink{font-size:14px;font-weight:600;color:var(--accent);text-decoration:none}
 .srclink:hover{text-decoration:underline}
 .tag.gk{background:color-mix(in srgb,var(--blue) 18%,transparent);color:var(--ink)}
@@ -204,6 +213,11 @@ tr:last-child td{border-bottom:0}
         <button type="button" id="src-ha" data-src="ha">Endast Hockeyakademin</button>
       </div>
     </div>
+    <label class="favonly" for="onlyfav">
+      <input type="checkbox" id="onlyfav">
+      <span class="sw" aria-hidden="true"></span>
+      <span class="fo-txt"><b>Föreslå bara favoriter</b><span id="favhint">Du har inga favoriter än. Markera övningar med ☆.</span></span>
+    </label>
     <div class="field">
       <span class="lbl">Fokus i dag (valfritt)</span>
       <div class="chips" id="focus"></div>
@@ -437,18 +451,21 @@ function build(){
   // drills
   const R=rng(S.seed*7919+n*31+(S.ice==="full"?1:2));
   const used={};
+  const noFav=[],usedIds=new Set();
   const order=[...st].sort((a,b)=>(b.goalie-a.goalie)||(a.i-b.i));
   for(const s of order){
     const ok=d=>d.areas.includes(s.type)&&d.min<=Math.max(2,minG)&&(s.coached||!d.coach);
     const allowed=d=>ok(d)&&!S.no.includes(d.id);
     let cand=DRILLS.filter(d=>allowed(d)&&(S.src!=="ha"||d.org==="Hockeyakademin"));
+    if(S.onlyFav&&S.fav.length){const fc=DRILLS.filter(d=>allowed(d)&&S.fav.includes(d.id)&&!usedIds.has(d.id));
+      if(fc.length)cand=fc;else noFav.push(s.i+1);}
     if(!cand.length)cand=DRILLS.filter(allowed);
     if(!cand.length)cand=DRILLS.filter(ok);
     s.fits=DRILLS.filter(ok);
-    const scored=cand.map(d=>({d,sc:R()+(S.focus.includes(d.cat)?1.6:0)+(s.goalie&&(d.cat==="shoot"||(FIG[d.id]||[]).some(e=>e[0]==="s"&&e.includes("N")))?2.2:0)-(used[d.cat]?1.3:0)+(S.fav.includes(d.id)?1.5:0)}));
+    const scored=cand.map(d=>({d,sc:R()+(S.focus.includes(d.cat)?1.6:0)+(s.goalie&&(d.cat==="shoot"||(FIG[d.id]||[]).some(e=>e[0]==="s"&&e.includes("N")))?2.2:0)-(used[d.cat]?1.3:0)-(usedIds.has(d.id)?4:0)+(S.fav.includes(d.id)?1.5:0)}));
     scored.sort((a,b)=>b.sc-a.sc);
     s.cands=scored.map(x=>x.d);
-    if(s.cands.length) used[s.cands[0].cat]=1;
+    if(s.cands.length){used[s.cands[0].cat]=1;usedIds.add(s.cands[0].id);}
     const sw=S.swaps[s.i]||0;
     s.drill=s.cands.length?s.cands[sw%s.cands.length]:null;
     const pk=S.pick[s.i]&&s.fits.find(d=>d.id===S.pick[s.i]);
@@ -459,6 +476,8 @@ function build(){
   const rounds=n;
   const sched=Array.from({length:n},(_,r)=>r);
 
+  if(noFav.length) notes.push({w:1,t:`Det finns ingen ledig favorit för station ${noFav.sort((a,b)=>a-b).join(", ")}: ingen passar ytan eller gruppstorleken, eller så används den redan på en annan station. Där föreslås en annan övning. Markera fler favoriter för att fylla alla stationer.`});
+  if(S.onlyFav&&!S.fav.length) notes.push({w:1,t:"”Föreslå bara favoriter” är på, men du har inga favoriter än. Alla övningar kan föreslås tills du markerar några med ☆."});
   return {skaters,goalies,n,sizes,st,notes,sched,rounds,
     warmup:WARMUPS[S.ice][Math.floor(R()*2)],finish:FINISH[S.ice][Math.floor(R()*2)]};
 }
@@ -625,7 +644,7 @@ function stationSVG(s,i){
 }
 
 function render(){
-  document.addEventListener("change",e=>{const t=e.target;if(t.dataset&&t.dataset.pick!==undefined){if(t.value)S.pick[t.dataset.pick]=t.value;else delete S.pick[t.dataset.pick];render();}});
+  document.addEventListener("change",e=>{const t=e.target;if(t.id==="onlyfav"){S.onlyFav=t.checked;S.swaps={};S.pick={};render();return;}if(t.dataset&&t.dataset.pick!==undefined){if(t.value)S.pick[t.dataset.pick]=t.value;else delete S.pick[t.dataset.pick];render();}});
 document.addEventListener("toggle",e=>{const t=e.target;if(t.dataset&&t.dataset.lib){const id=t.dataset.lib;
   if(t.open){openLib.add(id);const body=t.querySelector(".lib-body");if(body&&!body.querySelector("svg")){const d=DRILLS.find(x=>x.id===id);body.insertAdjacentHTML("afterbegin",libSVG(d));}}else openLib.delete(id);}},true);
 ["players","goalies","coaches"].forEach(k=>{if(document.activeElement!==$(k)) $(k).value=S[k];});
@@ -633,6 +652,8 @@ document.addEventListener("toggle",e=>{const t=e.target;if(t.dataset&&t.dataset.
   $("ice-half").setAttribute("aria-pressed",S.ice==="half");
   $("src-all").setAttribute("aria-pressed",S.src!=="ha");
   $("src-ha").setAttribute("aria-pressed",S.src==="ha");
+  $("onlyfav").checked=!!S.onlyFav;
+  {const nf=S.fav.length;$("favhint").textContent=nf?`Bara dina ${nf} favorit${nf===1?"":"er"} föreslås. Om ingen passar en station tas en annan övning.`:"Du har inga favoriter än. Markera övningar med ☆ på stationerna eller i biblioteket.";}
   $("focus").innerHTML=Object.entries(CATS).map(([k,v])=>`<button type="button" class="chip" data-focus="${k}" aria-pressed="${S.focus.includes(k)}">${v}</button>`).join("");
 
   const P=build();
