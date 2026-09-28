@@ -191,8 +191,8 @@ tr:last-child td{border-bottom:0}
       <div class="field">
         <span class="lbl" id="ice-l">Is</span>
         <div class="seg" role="group" aria-labelledby="ice-l">
-          <button type="button" id="ice-full" data-ice="full">Hel is</button>
           <button type="button" id="ice-half" data-ice="half">Halv is</button>
+          <button type="button" id="ice-full" data-ice="full">Hel is</button>
         </div>
       </div>
       <div class="field">
@@ -360,7 +360,7 @@ const LAYOUT={
  half:{1:["half1"],2:["hEnd","hNeut"],3:["LT","LB","hNeut"]}
 };
 
-const DEF={players:16,goalies:2,coaches:3,ice:"full",mins:60,focus:[],seed:1,swaps:{},src:"all",fav:[],no:[],pick:{},lib:"all"};
+const DEF={players:16,goalies:2,coaches:3,ice:"half",mins:60,focus:[],seed:1,swaps:{},src:"all",fav:[],no:[],pick:{},lib:"all"};
 let S;
 try{S=Object.assign({},DEF,JSON.parse(localStorage.getItem("t15plan")||"{}"));}catch(e){S=Object.assign({},DEF);}
 S.swaps=S.swaps||{};S.fav=S.fav||[];S.no=S.no||[];S.pick=S.pick||{};S.lib=S.lib||"all";
