@@ -124,11 +124,12 @@ details[open] .ln::after{content:" ▴"}
 .empty{color:var(--muted);margin:0}
 [hidden]{display:none!important}
 .tabpane{display:flex;flex-direction:column;gap:18px}
-.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:10;display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--surface);border-top:1px solid var(--line);padding:6px 12px calc(6px + env(safe-area-inset-bottom, 0px))}
-.tabbar button{border:0;background:transparent;color:var(--muted);font-family:var(--body);font-size:13px;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 4px;cursor:pointer;border-radius:10px}
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:10;display:grid;grid-template-columns:1fr 1fr 1fr;background:#0F2A55;border-top:1px solid #0A1F40;padding:6px 12px calc(6px + env(safe-area-inset-bottom, 0px))}
+.tabbar button{border:0;background:transparent;color:#B7C6DE;font-family:var(--body);font-size:13px;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 4px;cursor:pointer;border-radius:10px}
 .tabbar button svg{width:26px;height:26px}
 .tabbar button{position:relative}
-.tabbar button[aria-selected="true"]{color:var(--accent)}
+.tabbar button[aria-selected="true"]{color:#FFFFFF;background:rgba(255,255,255,.14)}
+.tabbar button:focus-visible{outline:2px solid #FFFFFF;outline-offset:-2px}
 .primary.create{width:100%;padding:16px 18px;font-size:22px;background:#1E8E4E;color:#fff}
 .primary.create:active{background:#177A41}
 .recap{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;font-size:15px}
