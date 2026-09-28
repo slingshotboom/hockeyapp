@@ -195,10 +195,6 @@ tr:last-child td{border-bottom:0}
           <button type="button" id="ice-full" data-ice="full">Hel is</button>
         </div>
       </div>
-      <div class="field">
-        <span class="lbl" id="len-l">Istid</span>
-        <div class="seg" role="group" aria-labelledby="len-l" id="lens"></div>
-      </div>
     </div>
     <div class="field">
       <span class="lbl" id="src-l">Övningar från</span>
@@ -360,7 +356,7 @@ const LAYOUT={
  half:{1:["half1"],2:["hEnd","hNeut"],3:["LT","LB","hNeut"]}
 };
 
-const DEF={players:16,goalies:2,coaches:3,ice:"half",mins:60,focus:[],seed:1,swaps:{},src:"all",fav:[],no:[],pick:{},lib:"all"};
+const DEF={players:16,goalies:2,coaches:3,ice:"half",focus:[],seed:1,swaps:{},src:"all",fav:[],no:[],pick:{},lib:"all"};
 let S;
 try{S=Object.assign({},DEF,JSON.parse(localStorage.getItem("t15plan")||"{}"));}catch(e){S=Object.assign({},DEF);}
 S.swaps=S.swaps||{};S.fav=S.fav||[];S.no=S.no||[];S.pick=S.pick||{};S.lib=S.lib||"all";
@@ -431,18 +427,11 @@ function build(){
     if(pk){s.drill=pk;s.manual=true;}
   }
 
-  // time plan
-  const mins=S.mins;
-  const warm=mins>=60?10:8, fin=mins>=60?12:(mins>=50?10:8);
-  const avail=mins-warm-fin;
-  let rounds=n, stT=Math.floor((avail-(n-1))/n);
-  if(n>1 && stT<6){rounds=Math.max(1,Math.min(n,Math.floor((avail+1)/7)));stT=Math.floor((avail-(rounds-1))/rounds);
-    notes.push({w:1,t:`Istiden räcker inte för att alla grupper ska hinna alla ${n} stationer. Varje grupp gör ${rounds}; ta resten nästa träning.`});}
-  const sched=[];let t=warm;
-  for(let r=0;r<rounds;r++){sched.push([t,t+stT]);t=t+stT+(r<rounds-1?1:0);}
-  const finStart=t;
+  // rotation: every group visits every station once
+  const rounds=n;
+  const sched=Array.from({length:n},(_,r)=>r);
 
-  return {skaters,goalies,n,sizes,st,notes,sched,warm,finStart,mins,rounds,stT,
+  return {skaters,goalies,n,sizes,st,notes,sched,rounds,
     warmup:WARMUPS[S.ice][Math.floor(R()*2)],finish:FINISH[S.ice][Math.floor(R()*2)]};
 }
 
@@ -590,7 +579,6 @@ document.addEventListener("toggle",e=>{const t=e.target;if(t.dataset&&t.dataset.
   $("ice-half").setAttribute("aria-pressed",S.ice==="half");
   $("src-all").setAttribute("aria-pressed",S.src!=="ha");
   $("src-ha").setAttribute("aria-pressed",S.src==="ha");
-  $("lens").innerHTML=[45,50,60,75].map(m=>`<button type="button" data-len="${m}" aria-pressed="${S.mins===m}">${m}′</button>`).join("");
   $("focus").innerHTML=Object.entries(CATS).map(([k,v])=>`<button type="button" class="chip" data-focus="${k}" aria-pressed="${S.focus.includes(k)}">${v}</button>`).join("");
 
   const P=build();
@@ -599,15 +587,14 @@ document.addEventListener("toggle",e=>{const t=e.target;if(t.dataset&&t.dataset.
   $("summary").innerHTML=`
    <div class="stat"><div class="big">${P.n}</div><div class="small">station${P.n>1?"er":""}${P.st.some(s=>!s.coached)?` · ${P.st.filter(s=>!s.coached).length} utan tränare`:""}</div></div>
    <div class="stat"><div class="big">${P.skaters?sizeTxt:"–"}</div><div class="small">spelare per grupp</div></div>
-   <div class="stat"><div class="big">${P.stT}′</div><div class="small">per station</div></div>`;
-  $("recap").innerHTML=`<span><b>${P.n}</b> station${P.n>1?"er":""}</span><span><b>${P.skaters?sizeTxt:"–"}</b> per grupp</span><span><b>${P.stT}′</b> per station</span><span>${S.ice==="full"?"Hel is":"Halv is"} · ${S.mins} min</span><button type="button" class="edit" data-tab="setup">Ändra</button>`;
+   <div class="stat"><div class="big">${P.st.filter(s=>s.goalie).length}</div><div class="small">station${P.st.filter(s=>s.goalie).length===1?"":"er"} med målvakt</div></div>`;
+  $("recap").innerHTML=`<span><b>${P.n}</b> station${P.n>1?"er":""}</span><span><b>${P.skaters?sizeTxt:"–"}</b> per grupp</span><span>${S.ice==="full"?"Hel is":"Halv is"}</span><button type="button" class="edit" data-tab="setup">Ändra</button>`;
   $("notes").innerHTML=P.notes.map(n=>`<li class="${n.w?"warn":""}">${esc(n.t)}</li>`).join("");
   $("rink").innerHTML=rinkSVG(P);
 
-  const pct=m=>(m/P.mins*100)+"%";
-  let tl=`<div style="width:${pct(P.warm)};background:var(--blue)">Uppv.</div>`;
-  P.sched.forEach(([a,b],r)=>{tl+=`<div style="width:${pct(b-a+(r<P.sched.length-1?1:0))};background:${r%2?"#5B6B7C":"#3E4E60"}">${P.rounds<=4?"Omg. "+(r+1):r+1}</div>`;});
-  tl+=`<div style="width:${pct(P.mins-P.finStart)};background:var(--red)">Spel</div>`;
+  let tl=`<div style="flex:1;background:var(--blue)">Uppv.</div>`;
+  P.sched.forEach(r=>{tl+=`<div style="flex:1;background:${r%2?"#5B6B7C":"#3E4E60"}">${P.rounds<=4?"Omg. "+(r+1):r+1}</div>`;});
+  tl+=`<div style="flex:1;background:var(--red)">Spel</div>`;
   $("timeline").innerHTML=tl;
 
   $("stations").innerHTML=P.st.map((s,i)=>{
@@ -637,14 +624,14 @@ document.addEventListener("toggle",e=>{const t=e.target;if(t.dataset&&t.dataset.
       </div></article>`;
   }).join("");
 
-  let th=`<tr><th>Tid</th>${P.st.map((s,i)=>`<th><span class="g" style="background:${COLORS[i]};color:#fff">${i+1}</span></th>`).join("")}</tr>`;
-  let rows=P.sched.map(([a,b],r)=>`<tr><td>${a}–${b} min</td>${P.st.map((s,j)=>{const g=((j-r)%P.n+P.n)%P.n;return `<td><span class="g">${L[g]}</span></td>`;}).join("")}</tr>`).join("");
+  let th=`<tr><th>Omgång</th>${P.st.map((s,i)=>`<th><span class="g" style="background:${COLORS[i]};color:#fff">${i+1}</span></th>`).join("")}</tr>`;
+  let rows=P.sched.map(r=>`<tr><td>Omg. ${r+1}</td>${P.st.map((s,j)=>{const g=((j-r)%P.n+P.n)%P.n;return `<td><span class="g">${L[g]}</span></td>`;}).join("")}</tr>`).join("");
   $("rot").innerHTML=th+rows;
   $("groups").textContent=`${P.sizes.map((z,g)=>`Grupp ${L[g]}: ${z} spelare`).join(" · ")}. När det blåses går varje grupp till nästa stationsnummer.`;
 
   $("bookend").innerHTML=`
-    <div class="bk"><div class="when">0–${P.warm} min · Uppvärmning, hela laget</div><h3>${esc(P.warmup.name)}</h3><p>${esc(P.warmup.desc)}</p></div>
-    <div class="bk"><div class="when">${P.finStart}–${P.mins} min · Avslutning, hela laget</div><h3>${esc(P.finish.name)}</h3><p>${esc(P.finish.desc)}</p></div>`;
+    <div class="bk"><div class="when">Start · Uppvärmning, hela laget</div><h3>${esc(P.warmup.name)}</h3><p>${esc(P.warmup.desc)}</p></div>
+    <div class="bk"><div class="when">Slut · Avslutning, hela laget</div><h3>${esc(P.finish.name)}</h3><p>${esc(P.finish.desc)}</p></div>`;
   renderLib();
   $("tbcount").textContent=DRILLS.length;
   save();
@@ -686,7 +673,6 @@ document.addEventListener("click",e=>{
   if(b.dataset.step){const [k,d]=b.dataset.step.split(":");const el=$(k);S[k]=Math.max(+el.min,Math.min(+el.max,(S[k]|0)+(+d)));S.swaps={};S.pick={};render();}
   else if(b.dataset.src){S.src=b.dataset.src;S.swaps={};S.pick={};render();}
   else if(b.dataset.ice){S.ice=b.dataset.ice;S.swaps={};S.pick={};render();}
-  else if(b.dataset.len){S.mins=+b.dataset.len;render();}
   else if(b.dataset.focus){const f=b.dataset.focus;S.focus=S.focus.includes(f)?S.focus.filter(x=>x!==f):S.focus.concat(f);S.swaps={};S.pick={};render();}
   else if(b.dataset.swap!==undefined){const i=b.dataset.swap;S.swaps[i]=(S.swaps[i]||0)+1;render();}
   else if(b.id==="shuffle"){S.seed=(S.seed||1)+1;S.swaps={};S.pick={};render();}
