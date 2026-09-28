@@ -93,6 +93,7 @@ svg{overflow:hidden}
 .tags{display:flex;flex-wrap:wrap;gap:6px}
 .tag{font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--chip);color:var(--ink)}
 .tag.self{background:transparent;border:1px dashed var(--muted);color:var(--muted)}
+.tag.usa{background:color-mix(in srgb,var(--blue) 16%,transparent);color:var(--ink)}
 .tag.ha{background:color-mix(in srgb,var(--red) 16%,transparent);color:var(--ink)}
 .star{flex:none;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--ice);color:var(--muted);font-size:22px;line-height:1;cursor:pointer}
 .star[aria-pressed="true"]{color:#D99A00;border-color:#D99A00;background:color-mix(in srgb,#F2B705 14%,var(--surface))}
@@ -269,7 +270,7 @@ tr:last-child td{border-bottom:0}
     <div class="liblist" id="liblist"></div>
   </section>
 
-  <p class="howto" style="margin:0">Favoriter och bortvalda övningar sparas på den här telefonen. Övningar märkta Hockeyakademin är beskrivna med egna ord utifrån <a class="srclink" href="https://hockeyakademin.se/ovningar" target="_blank" rel="noopener">Hockeyakademins övningsbank</a> (Svenska Ishockeyförbundet &amp; Svenska Spel). Originalen har video och PDF.</p>
+  <p class="howto" style="margin:0">Favoriter och bortvalda övningar sparas på den här telefonen. Övningar märkta Hockeyakademin är beskrivna med egna ord utifrån <a class="srclink" href="https://hockeyakademin.se/ovningar" target="_blank" rel="noopener">Hockeyakademins övningsbank</a> (Svenska Ishockeyförbundet &amp; Svenska Spel). Övningar märkta USA Hockey bygger på <a class="srclink" href="https://usahockey.cachefly.net/Coaching/Manuals/SmallAreaGamesBook.pdf" target="_blank" rel="noopener">USA Hockeys bok om smålagsspel</a>. Originalen har fler detaljer.</p>
 
   </div>
 </div>
@@ -321,8 +322,35 @@ const DRILLS=[
  {id:"ha9",cat:"battle",name:"Smålagsspel mot ett mål",src:"https://hockeyakademin.se/ovningar/smalagsspel-ett-mal",areas:["net"],min:4,coach:true,desc:"Båda lagen anfaller samma mål. Variant: ett lag anfaller och ett försvarar. 2 mot 2 upp till 4 mot 4, byten var 30–40 sekund.",pts:["Uppmuntra under spelet och vid byten","Byt lagstorlek för nya situationer"]},
  {id:"ha10",cat:"battle",name:"1 mot 1 längs sargen och i cirkeln",src:"https://hockeyakademin.se/ovningar/stationstraning-4-ytor",areas:["net","corner"],min:2,coach:true,desc:"Del 1: 1 mot 1 på en liten yta längs sargen där den ena täcker pucken och den andra försöker vinna den. Del 2: samma sak inne i en tekningscirkel.",pts:["Blicken upp","Tävla på riktigt i varje duell"]},
  {id:"ha11",cat:"battle",name:"2 mot 2 från hörnen",src:"https://hockeyakademin.se/ovningar/stationstraning-4-ytor",areas:["net"],min:4,coach:true,desc:"Tränaren spelar in pucken. Två anfallare mot två försvarare i ungefär 15 sekunder, sedan nästa fyra.",pts:["Försvar: bladet mot pucken, rensa zonen","Anfall: stötta puckföraren och hitta ytor"]},
- {id:"ha12",cat:"shoot",name:"Skott mot sargen",src:"https://hockeyakademin.se/ovningar/skott-mot-sarg",areas:["corner"],min:2,coach:false,desc:"Spelarna skjuter mot sargen i stället för mot mål. Det ger många skott och passar bra när det är få målvakter. Skjut dragskott med fokus på kroppsställningen.",pts:["Dra pucken, för över vikten och skjut","Följ igenom mot en punkt på sargen"]}
+ {id:"ha12",cat:"shoot",name:"Skott mot sargen",src:"https://hockeyakademin.se/ovningar/skott-mot-sarg",areas:["corner"],min:2,coach:false,desc:"Spelarna skjuter mot sargen i stället för mot mål. Det ger många skott och passar bra när det är få målvakter. Skjut dragskott med fokus på kroppsställningen.",pts:["Dra pucken, för över vikten och skjut","Följ igenom mot en punkt på sargen"]},
+ {id:"ha13",cat:"shoot",name:"Snabbt skott efter sidledsförflyttning",src:"https://hockeyakademin.se/ovningar/stationstraning-4-ytor-2",org:"Hockeyakademin",areas:["net"],min:2,coach:true,desc:"Tränaren passar. Spelaren gör en snabb förflyttning i sidled, tar emot och skjuter så fort som möjligt. Börja lugnt och öka tempot.",pts:["Snabb viktöverföring i skottet","Skjut direkt, inga extra touchar"]},
+ {id:"ha15",cat:"shoot",name:"Fart till blålinjen och returkamp",src:"https://hockeyakademin.se/ovningar/stationstraning-4-ytor-2",org:"Hockeyakademin",areas:["net"],min:2,coach:false,desc:"Spelaren åker i full fart från mållinjen till blålinjen, hämtar en puck, går på mål och kämpar om returen.",pts:["Full fart hela vägen","Följ skottet till mål"]},
+ {id:"ha16",cat:"pass",name:"Passningsgrunder i par",src:"https://hockeyakademin.se/ovningar/passningar-tekniska-grunder",org:"Hockeyakademin",areas:["neutral","corner","net"],min:2,coach:false,desc:"Par med en puck. Först stillastående passningar med olika fotställning, både forehand och backhand. Sedan passningar medan paret åker lugnt, och farten ökas efter hand.",pts:["Ta emot mjukt genom att följa med pucken bakåt","Ropa kompisens namn innan passningen"]},
+ {id:"ha18",cat:"battle",name:"Stafett genom konbana till puck",src:"https://hockeyakademin.se/ovningar/stationstraning-6-stationer",org:"Hockeyakademin",areas:["net"],min:2,coach:false,desc:"Två spelare startar samtidigt genom var sin konbana. Pucken ligger framför mål, och den som kommer först försöker göra mål medan den andra försvarar.",pts:["Tävla hela vägen","Snäva svängar runt konerna"]},
+ {id:"ha19",cat:"puck",name:"Puckskydd mot tränaren",src:"https://hockeyakademin.se/ovningar/stationstraning-6-stationer",org:"Hockeyakademin",areas:["neutral","corner","net"],min:2,coach:true,desc:"Alla spelare för en puck. Tränaren försöker ta pucken med en upp-och-nedvänd klubba. Tappar man pucken hämtar man den och fortsätter. Tränaren visar hur man skyddar pucken med kroppen.",pts:["Kroppen mellan tränaren och pucken","Blicken upp för att se var tränaren är"]},
+ {id:"ha20",cat:"skate",name:"Fryskull med tränare",src:"https://hockeyakademin.se/ovningar/stationstraning-10-stationer",org:"Hockeyakademin",areas:["corner","neutral"],min:4,coach:true,desc:"Spelarna åker fritt och tränaren försöker ta dem. Den som blir tagen fryser med armarna uppe tills en lagkamrat befriar hen genom att röra vid hen.",pts:["Snabba riktningsändringar","Hjälp varandra loss"]},
+ {id:"ha21",cat:"skate",name:"Skridskogrunder: C-skär, baklänges och innerskär",src:"https://hockeyakademin.se/ovningar/skridskoakning-tekniska-grunder-del-2",org:"Hockeyakademin",areas:["neutral","corner","net"],min:2,coach:true,desc:"Över ytan i led: C-skär med en skridsko i taget, baklänges­åkning, slalom, ”springa” på skridskorna, jämfotahopp och långa svängar på innerskär.",pts:["Tränaren visar varje moment","Låg fart först, sedan snabbare"]},
+ {id:"ha22",cat:"battle",name:"Smålagsspel med hinder",src:"https://hockeyakademin.se/ovningar/stationstraning-smalagsspel",org:"Hockeyakademin",areas:["neutral","corner","net"],min:4,coach:false,desc:"Vanligt smålagsspel med småmål, men med koner och hinder utplacerade på ytan. Spelarna måste ta sig runt hindren och hålla pucken.",pts:["Blicken upp för att se hindren","Stötta puckföraren"]},
+ {id:"ha23",cat:"skate",name:"Rörelser på signal",src:"https://hockeyakademin.se/ovningar/stationstraning-6-stationer",org:"Hockeyakademin",areas:["neutral","corner","net"],min:2,coach:true,desc:"Spelarna åker fritt. Tränaren ropar en rörelse: stopp, stå på ett ben, huka ihop, hoppa, snurra eller ta i isen med knät. Lägg till puck när det går bra.",pts:["Snabb reaktion på signalen","Balans och låg tyngdpunkt"]},
+ {id:"u1",cat:"battle",name:"Spel i tekningscirkeln",src:"https://usahockey.cachefly.net/Coaching/Manuals/SmallAreaGamesBook.pdf",org:"USA Hockey",areas:["net","corner"],min:4,coach:true,desc:"Två småmål inne i en tekningscirkel. Spelare runt cirkeln håller pucken i spel. Tränaren ropar vilka som går in: 1 mot 1, 2 mot 1 eller 2 mot 2.",pts:["Snabba passningar i trånga lägen","Läs var pucken kommer"]},
+ {id:"u2",cat:"skate",name:"Fram- och baklängestagen",src:"https://usahockey.cachefly.net/Coaching/Manuals/SmallAreaGamesBook.pdf",org:"USA Hockey",areas:["neutral","corner"],min:4,coach:false,desc:"Ytan delas i två halvor. På ena halvan får man bara åka framlänges, på andra bara baklänges. Den som blir tagen blir tagare.",pts:["Snabba vändningar vid mittlinjen","Blicken upp"]},
+ {id:"u3",cat:"puck",name:"Hajen i zonen",src:"https://usahockey.cachefly.net/Coaching/Manuals/SmallAreaGamesBook.pdf",org:"USA Hockey",areas:["net","corner"],min:5,coach:false,desc:"Fiskarna står vid sargen med var sin puck och ska ta sig över. Hajen försöker peta bort puckarna. Tekningspunkterna och sargen är säkra platser.",pts:["Skydda pucken med kroppen","Byt fart för att lura hajen"]},
+ {id:"u4",cat:"puck",name:"Kaos med puck",src:"https://usahockey.cachefly.net/Coaching/Manuals/SmallAreaGamesBook.pdf",org:"USA Hockey",areas:["net","corner","neutral"],min:3,coach:false,desc:"Alla har en egen puck inne i en eller två cirklar och åker åt alla håll utan att krocka. Tränaren ropar tempo och fintar.",pts:["Blicken upp hela tiden","Pucken nära kroppen"]},
+ {id:"u5",cat:"skate",name:"Klubbhopp och överskär",src:"https://usahockey.cachefly.net/Coaching/Manuals/SmallAreaGamesBook.pdf",org:"USA Hockey",areas:["net","corner"],min:2,coach:false,desc:"Klubbor ligger på isen. Hoppa jämfota över dem, sedan sidledshopp, och avsluta med överskär runt en tekningscirkel.",pts:["Landa mjukt med böjda knän","Tryck med undre benet i överskären"]},
+ {id:"u6",cat:"battle",name:"2 mot 2 med extraspelare",src:"https://usahockey.cachefly.net/Coaching/Manuals/SmallAreaGamesBook.pdf",org:"USA Hockey",areas:["net"],min:5,coach:true,desc:"2 mot 2 i zonen plus en extraspelare som alltid spelar med laget som har pucken, så att det blir 3 mot 2. Vid puckvinst byter extraspelaren lag.",pts:["Snabb omställning vid puckvinst","Använd överläget"]},
+ {id:"u7",cat:"battle",name:"2 mot 1 i hörnet",src:"https://usahockey.cachefly.net/Coaching/Manuals/SmallAreaGamesBook.pdf",org:"USA Hockey",areas:["corner","net"],min:4,coach:true,desc:"2 mot 1 i hörnet med ett mål vänt mot sargen. Spelarna runt omkring håller pucken i spel. Byt var 30–40 sekund.",pts:["Korta, snabba passningar","Försvararen: tvinga ut puckföraren"]},
+ {id:"u8",cat:"shoot",name:"Returspelet",src:"https://usahockey.cachefly.net/Coaching/Manuals/SmallAreaGamesBook.pdf",org:"USA Hockey",areas:["net"],min:5,coach:true,desc:"Spelare står runt målgården. En spelare skjuter från toppen, och det blir mål på skott eller retur. Målvakten får poäng för varje räddning eller skott utanför.",pts:["Klubban i isen vid målet","Första steget mot returen"]},
+ {id:"u9",cat:"skate",name:"Överskärsstafett runt cirkeln",src:"https://usahockey.cachefly.net/Coaching/Manuals/SmallAreaGamesBook.pdf",org:"USA Hockey",areas:["net","corner"],min:4,coach:true,desc:"Två spelare åker överskär runt en tekningscirkel i kapp. Tränaren lägger ut en puck. Den som kommer först skjuter och den andra backcheckar.",pts:["Överskär i högt tempo","Backchecka med klubban i isen"]},
+ {id:"u10",cat:"battle",name:"Tränarens regel",src:"https://usahockey.cachefly.net/Coaching/Manuals/SmallAreaGamesBook.pdf",org:"USA Hockey",areas:["net","corner","neutral"],min:6,coach:true,desc:"3 mot 3 där tränaren byter regel då och då: bara backhand, två passningar innan skott, passning via sargen eller bara baklänges.",pts:["Snabbt tänkande när regeln ändras","Prata med varandra"]},
+ {id:"u11",cat:"pass",name:"Baseboll på is",src:"https://usahockey.cachefly.net/Coaching/Manuals/SmallAreaGamesBook.pdf",org:"USA Hockey",areas:["net"],min:6,coach:true,desc:"Koner som baser. Slagaren skjuter pucken långt ut och åker runt baserna. Utespelarna måste passa tre gånger och göra mål innan slagaren är hemma.",pts:["Snabba, säkra passningar","Samarbeta i laget"]},
+ {id:"u12",cat:"battle",name:"Udda och jämnt: från 1 mot 1 till 4 mot 4",src:"https://usahockey.cachefly.net/Coaching/Manuals/SmallAreaGamesBook.pdf",org:"USA Hockey",areas:["net"],min:6,coach:true,desc:"Börja med 1 mot 1. Tränaren skickar in en ny spelare åt gången, växelvis från lagen, så att det blir överläge och jämnt om vartannat.",pts:["Se överläget och passa","Hitta en ny man att täcka"]},
+ {id:"u13",cat:"shoot",name:"Frilägesstafett",src:"https://usahockey.cachefly.net/Coaching/Manuals/SmallAreaGamesBook.pdf",org:"USA Hockey",areas:["neutral"],min:6,coach:true,desc:"Två lag längs sargen och två småmål i mittzonen. En spelare åt gången åker på mål, och nästa får starta först när den förra gjort mål och kommit tillbaka.",pts:["Fart mot mål","Lugn i avslutet"]},
+ {id:"u14",cat:"battle",name:"1 mot 1 mot tomt mål",src:"https://usahockey.cachefly.net/Coaching/Manuals/SmallAreaGamesBook.pdf",org:"USA Hockey",areas:["net"],min:4,coach:true,desc:"Anfallare med puck vid blålinjen och en försvarare en bit framför. Anfallaren ska ta sig runt konerna och skjuta på tomt mål. Först till tre poäng vinner.",pts:["Anfall: fart och fintar","Försvar: håll avståndet och vinkeln"]},
+ {id:"u15",cat:"shoot",name:"Styrningar framför mål",src:"https://usahockey.cachefly.net/Coaching/Manuals/SmallAreaGamesBook.pdf",org:"USA Hockey",areas:["net"],min:4,coach:true,desc:"2 mot 2. En spelare skjuter från toppen och lagkamraten försöker styra pucken framför mål. Bara styrningar räknas som mål.",pts:["Klubbladet mot isen","Hitta en lucka framför målvakten"]},
+ {id:"u16",cat:"pass",name:"Sargmål i mittzonen",src:"https://usahockey.cachefly.net/Coaching/Manuals/SmallAreaGamesBook.pdf",org:"USA Hockey",areas:["neutral"],min:6,coach:false,desc:"Sargen mellan blålinjerna är mål. Laget måste passa tre gånger innan de får ”göra mål” genom att föra pucken fram till sargen, utan skott.",pts:["Hitta fria ytor","Räkna passningarna högt"]},
+ {id:"u17",cat:"skate",name:"Poliser och tjuvar",src:"https://usahockey.cachefly.net/Coaching/Manuals/SmallAreaGamesBook.pdf",org:"USA Hockey",areas:["neutral","corner"],min:6,coach:false,desc:"Två cirklar är säkra platser. Tjuvarna ska ta sig mellan cirklarna utan att bli tagna av poliserna. Den som blir tagen byter roll.",pts:["Byt riktning och fart","Åk både framlänges och baklänges"]}
 ];
+DRILLS.forEach(d=>{if(d.src&&!d.org)d.org="Hockeyakademin";});
 const WARMUPS={
  full:[{name:"Flytåkning + rörlighet",desc:"Varv runt hela rinken: framlänges, baklänges, överskär i hörnen. Stanna vid mitten för bensvingar och höftöppnare."},
        {name:"Åtta med puck",desc:"Alla med puck. Åk en åtta genom båda zonerna, överskär runt varje tekningscirkel, snäv sväng vid blålinjerna."}],
@@ -413,7 +441,7 @@ function build(){
   for(const s of order){
     const ok=d=>d.areas.includes(s.type)&&d.min<=Math.max(2,minG)&&(s.coached||!d.coach);
     const allowed=d=>ok(d)&&!S.no.includes(d.id);
-    let cand=DRILLS.filter(d=>allowed(d)&&(S.src!=="ha"||d.src));
+    let cand=DRILLS.filter(d=>allowed(d)&&(S.src!=="ha"||d.org==="Hockeyakademin"));
     if(!cand.length)cand=DRILLS.filter(allowed);
     if(!cand.length)cand=DRILLS.filter(ok);
     s.fits=DRILLS.filter(ok);
@@ -476,6 +504,32 @@ const FIG={
  ha10:[["box",14,70,70,26],["x",40,82],["o",56,86],["h",40,82,30,88,46,92],["ring",70,34,20],["x",64,30],["o",78,40],["h",64,30,62,40,70,44]],
  ha11:[["C",80,8],["a",78,10,12,12],["x",18,6],["x",52,30],["o",30,28],["o",42,56],["h",14,14,26,20,40,40],["a",40,40,52,34],["s",54,36,"N"]],
  ha12:[["x",45,40],["x",62,64],["x",80,40],["s",43,40,4,36],["s",60,64,4,72],["s",78,40,40,24]],
+ ha13:[["C",18,14],["x",48,30],["k",48,32,46,52],["a",20,17,45,50],["s",44,54,"N"]],
+ ha15:[["x",14,88],["k",16,88,60,82,94,56],["h",92,50,70,42,40,50],["s",38,50,"N"],["k",36,54,22,58]],
+ ha16:[["x",20,26],["x",62,26],["a",23,24,59,24],["a",59,30,23,30],["x",15,68],["x",15,86],["k",17,68,85,68],["k",17,86,85,86],["a",40,84,55,70]],
+ ha18:[["c",62,24],["c",76,18],["c",90,24],["c",62,76],["c",76,82],["c",90,76],["x",96,32],["x",96,68],["k",94,32,82,22,68,28,50,46],["k",94,68,82,78,68,72,50,54],["s",46,50,"N"]],
+ ha19:[["C",50,50],["x",30,30],["x",70,30],["x",35,72],["x",70,70],["h",30,30,42,40,40,20],["h",70,30,60,42,76,48],["h",35,72,46,60,28,58],["h",70,70,58,64,64,84]],
+ ha20:[["box",10,10,80,80],["C",50,50],["k",50,50,38,40],["x",30,30],["x",70,28],["x",28,72],["x",72,70],["k",70,28,84,40],["k",28,72,18,58]],
+ ha21:[["x",8,20],["k",10,20,90,20],["x",8,50],["k",10,50,30,42,50,58,70,42,90,50],["x",8,80],["k",10,80,90,80],["C",50,95]],
+ ha22:[["n",6,50],["n",94,50],["c",35,30],["c",50,64],["c",66,34],["x",30,50],["x",45,76],["o",62,52],["o",72,72],["h",30,50,42,40,56,44]],
+ ha23:[["x",10,25],["x",10,50],["x",10,75],["k",12,25,40,25],["k",12,50,40,50],["k",12,75,40,75],["c",50,25],["c",50,50],["c",50,75],["k",60,25,90,25],["k",60,50,90,50],["k",60,75,90,75],["C",50,94]],
+ u1:[["ring",50,50,34],["n",36,50],["n",64,50],["x",45,36],["o",56,62],["x",50,14],["x",84,50],["o",16,50],["o",50,86],["h",45,36,40,44],["a",82,50,60,58]],
+ u2:[["box",10,10,80,80],["c",50,14],["c",50,38],["c",50,62],["c",50,86],["o",30,45],["k",30,45,22,32],["x",20,70],["k",20,70,12,60],["x",70,30],["k",70,30,82,44],["x",72,72]],
+ u3:[["o",50,50],["k",50,50,40,40],["x",10,20],["x",10,50],["x",10,80],["h",12,20,50,24,88,20],["h",12,50,40,62,88,58],["h",12,80,60,78,88,82]],
+ u4:[["ring",35,35,24],["ring",65,65,24],["x",30,30],["x",45,45],["x",60,62],["x",72,75],["x",25,48],["h",30,30,40,20],["h",45,45,55,52],["h",60,62,70,52],["h",72,75,60,82],["h",25,48,18,34]],
+ u5:[["l",25,35,25,65],["l",40,35,40,65],["l",55,35,55,65],["ring",80,50,15],["x",8,50],["k",10,50,70,50,80,34,94,50,80,66,68,56]],
+ u6:[["x",40,30],["x",40,70],["o",25,40],["o",25,62],["x",72,50],["a",42,32,70,48],["h",72,50,50,52],["s",48,52,"N"]],
+ u7:[["n",6,92],["x",35,70],["x",55,88],["o",40,84],["a",37,72,53,86],["s",53,88,9,92],["x",75,55],["o",25,55]],
+ u8:[["x",40,20],["x",30,30],["x",28,70],["x",40,80],["x",25,50],["x",70,50],["s",68,50,"N"],["k",25,48,18,46]],
+ u9:[["ring",45,50,24],["x",45,26],["o",45,74],["k",...circ(45,50,24,270,500,10)],["C",90,50],["a",88,50,70,50]],
+ u10:[["C",90,15],["x",40,30],["x",60,62],["x",70,35],["o",30,55],["o",50,45],["o",78,70],["a",70,37,58,60],["h",60,62,40,58],["s",38,56,"N"]],
+ u11:[["c",55,20],["c",80,50],["c",55,80],["x",35,50],["s",37,50,92,22],["k",35,46,55,24,78,50,55,76,38,54],["o",90,30],["o",86,72],["a",88,34,84,68]],
+ u12:[["C",92,50],["x",60,35],["o",50,48],["x",82,20],["k",80,20,62,28],["a",90,54,62,38],["s",58,40,"N"]],
+ u13:[["n",35,50],["n",65,50],["x",6,30],["x",6,20],["o",94,70],["o",94,80],["h",8,30,40,30,58,44],["s",58,46,63,50],["h",92,70,60,70,42,56],["s",42,54,37,51]],
+ u14:[["x",92,40],["o",80,42],["c",40,25],["c",40,75],["h",90,40,60,20,40,18,28,40],["s",28,42,"N"],["k",80,44,50,44]],
+ u15:[["x",80,50],["x",25,40],["o",20,58],["s",78,50,28,44],["k",25,40,20,46],["s",22,46,"N"]],
+ u16:[["x",40,30],["x",60,62],["x",30,72],["o",55,40],["o",70,30],["o",40,55],["a",40,32,58,60],["a",60,64,32,70],["h",30,74,6,72]],
+ u17:[["ring",12,50,18],["ring",88,50,18],["x",14,40],["x",86,60],["o",50,40],["o",50,65],["k",14,40,50,20,84,40],["k",50,40,40,30]],
  b5:[["C",90,28],["s",87,30,"N"],["x",28,42],["o",20,56],["k",28,42,22,48]]
 };
 function mapper(z){
@@ -602,7 +656,7 @@ document.addEventListener("toggle",e=>{const t=e.target;if(t.dataset&&t.dataset.
     const tags=[`<span class="tag">${d?CATS[d.cat]:"Fri åkning"}</span>`];
     if(!s.coached) tags.push(`<span class="tag self">Ingen tränare behövs</span>`);
     if(s.goalie) tags.push(`<span class="tag gk">Målvakten stannar här</span>`);
-    if(d&&d.src) tags.push(`<span class="tag ha">Hockeyakademin</span>`);
+    if(d&&d.org) tags.push(`<span class="tag ${d.org==="Hockeyakademin"?"ha":"usa"}">${d.org}</span>`);
     if(s.manual) tags.push(`<span class="tag self">Vald av dig</span>`);
     const fav=d&&S.fav.includes(d.id);
     const opts=s.fits.map(x=>`<option value="${x.id}"${d&&x.id===d.id?" selected":""}>${S.fav.includes(x.id)?"★ ":""}${esc(x.name)}${S.no.includes(x.id)?" (bortvald)":""}</option>`).join("");
@@ -614,7 +668,7 @@ document.addEventListener("toggle",e=>{const t=e.target;if(t.dataset&&t.dataset.
       <div class="st-body"><div class="tags">${tags.join("")}</div>
         <p>${d?esc(d.desc):""}</p>
         ${d?`<ul>${d.pts.map(p=>`<li>${esc(p)}</li>`).join("")}</ul>`:""}
-        ${d&&d.src?`<a class="srclink" href="${d.src}" target="_blank" rel="noopener">Se originalet på Hockeyakademin ↗</a>`:""}
+        ${d&&d.src?`<a class="srclink" href="${d.src}" target="_blank" rel="noopener">Se originalet på ${d.org} ↗</a>`:""}
         <div class="st-actions">
           ${s.cands.length>1?`<button type="button" class="swap" data-swap="${i}">Byt övning</button>`:""}
           ${d?`<button type="button" class="swap mute" data-no="${d.id}" data-st="${i}">Föreslå inte igen</button>`:""}
@@ -647,9 +701,9 @@ function libSVG(d){
 }
 function renderLib(){
   const nFav=DRILLS.filter(d=>S.fav.includes(d.id)).length, nNo=DRILLS.filter(d=>S.no.includes(d.id)).length;
-  const nHa=DRILLS.filter(d=>d.src).length;
+  const nHa=DRILLS.filter(d=>d.org==="Hockeyakademin").length, nUs=DRILLS.filter(d=>d.org==="USA Hockey").length;
   $("libcount").innerHTML=`<div class="libnum"><span class="big">${DRILLS.length}</span> övningar i biblioteket</div>
-    <div class="libsub">${DRILLS.length-nHa} egna · ${nHa} från Hockeyakademin · ★ ${nFav} favorit${nFav===1?"":"er"} · ${nNo} bortvald${nNo===1?"":"a"}</div>
+    <div class="libsub">${DRILLS.length-nHa-nUs} egna · ${nHa} från Hockeyakademin · ${nUs} från USA Hockey · ★ ${nFav} favorit${nFav===1?"":"er"} · ${nNo} bortvald${nNo===1?"":"a"}</div>
     <div class="libcats">${Object.entries(CATS).map(([k,v])=>`<span class="tag">${v} ${DRILLS.filter(d=>d.cat===k).length}</span>`).join("")}</div>`;
   ["all","fav","no"].forEach(k=>$("lib-"+k).setAttribute("aria-pressed",S.lib===k));
   $("lib-fav").textContent=`★ Favoriter ${nFav}`;$("lib-no").textContent=`Bortvalda ${nNo}`;
@@ -660,9 +714,9 @@ function renderLib(){
     const f=S.fav.includes(d.id),no=S.no.includes(d.id),op=openLib.has(d.id);
     return `<div class="lib-item${no?" off":""}">
       <details data-lib="${d.id}"${op?" open":""}><summary><span class="ln">${esc(d.name)}</span>
-        <span class="lm">${CATS[d.cat]} · ${d.areas.map(a=>AREAS[a]).join(", ")} · minst ${d.min} spelare${d.coach?"":" · går utan tränare"}${d.src?" · Hockeyakademin":""}</span></summary>
+        <span class="lm">${CATS[d.cat]} · ${d.areas.map(a=>AREAS[a]).join(", ")} · minst ${d.min} spelare${d.coach?"":" · går utan tränare"}${d.org?" · "+d.org:""}</span></summary>
         <div class="lib-body">${op?libSVG(d):""}<p>${esc(d.desc)}</p><ul>${d.pts.map(p=>`<li>${esc(p)}</li>`).join("")}</ul>
-        ${d.src?`<a class="srclink" href="${d.src}" target="_blank" rel="noopener">Se originalet på Hockeyakademin ↗</a>`:""}</div></details>
+        ${d.src?`<a class="srclink" href="${d.src}" target="_blank" rel="noopener">Se originalet på ${d.org} ↗</a>`:""}</div></details>
       <div class="lib-actions"><button type="button" class="star" data-fav="${d.id}" aria-pressed="${f}" aria-label="${f?"Ta bort från favoriter":"Spara som favorit"}">${f?"★":"☆"}</button>
         <button type="button" class="nobtn" data-no="${d.id}" aria-pressed="${no}">${no?"Bortvald":"Föreslå inte"}</button></div>
     </div>`;}).join(""):`<p class="empty">${S.lib==="fav"?"Inga favoriter ännu. Tryck på ☆ vid en övning för att spara den.":"Inga bortvalda övningar."}</p>`;
