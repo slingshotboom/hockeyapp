@@ -1,0 +1,708 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1D4E9E">
+<title>Team 15 Träningsplanerare</title>
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Team 15">
+<style>
+:root{
+  --bg:#EAF0F4; --surface:#FFFFFF; --ice:#F6F9FB; --ink:#0E1A28; --muted:#566677;
+  --line:#D3DDE5; --red:#C62834; --blue:#1D4E9E; --accent:#1D4E9E; --accent-ink:#FFFFFF;
+  --rink:#9DB2C4; --chip:#E3EAF0;
+  --s1:#D9485F; --s2:#2F6FD6; --s3:#1E9E77; --s4:#D08A12; --s5:#8B5CF6; --s6:#0E9FB0;
+  --display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#09111B; --surface:#111D2A; --ice:#14222F; --ink:#E5ECF2; --muted:#93A4B5;
+    --line:#23364A; --red:#EA5A63; --blue:#6E9CEB; --accent:#6E9CEB; --accent-ink:#08121D;
+    --rink:#3F5870; --chip:#1A2A3A;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#09111B; --surface:#111D2A; --ice:#14222F; --ink:#E5ECF2; --muted:#93A4B5;
+  --line:#23364A; --red:#EA5A63; --blue:#6E9CEB; --accent:#6E9CEB; --accent-ink:#08121D;
+  --rink:#3F5870; --chip:#1A2A3A;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.45;-webkit-text-size-adjust:100%}
+.wrap{max-width:760px;margin:0 auto;padding-inline:16px;padding-block:20px 48px;display:flex;flex-direction:column;gap:18px}
+header{display:flex;flex-direction:column;gap:2px}
+.eyebrow{font-family:var(--display);font-weight:600;letter-spacing:.12em;text-transform:uppercase;font-size:13px;color:var(--red)}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(30px,9.5vw,44px);overflow-wrap:anywhere;line-height:1;margin:0;text-wrap:balance;letter-spacing:.01em}
+h2{font-family:var(--display);font-weight:700;font-size:24px;margin:0;letter-spacing:.02em;text-transform:uppercase}
+h3{font-family:var(--display);font-weight:700;font-size:21px;margin:0;line-height:1.1}
+.sub{color:var(--muted);margin:4px 0 0;font-size:15px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:14px}
+.inputs{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media (max-width:480px){.inputs{grid-template-columns:1fr}}
+.field{display:flex;flex-direction:column;gap:6px}
+.lbl{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.stepper{display:grid;grid-template-columns:48px 1fr 48px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--ice)}
+.stepper button{border:0;background:transparent;color:var(--accent);font-size:26px;font-weight:600;height:52px;cursor:pointer;font-family:var(--body)}
+.stepper button:active{background:var(--chip)}
+.stepper input{border:0;background:transparent;color:var(--ink);text-align:center;font-family:var(--display);font-size:30px;font-weight:700;width:100%;min-width:0;font-variant-numeric:tabular-nums;-moz-appearance:textfield}
+.stepper input::-webkit-outer-spin-button,.stepper input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:480px){.row2{grid-template-columns:1fr}}
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;background:var(--ice);border:1px solid var(--line);border-radius:12px;padding:3px;gap:3px}
+.seg button{border:0;border-radius:9px;background:transparent;color:var(--ink);font-family:var(--display);font-weight:600;font-size:18px;height:44px;cursor:pointer;letter-spacing:.03em}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--ice);color:var(--ink);border-radius:999px;padding:8px 14px;font-family:var(--body);font-size:15px;font-weight:500;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.stat .big{font-family:var(--display);font-weight:700;font-size:38px;line-height:1;font-variant-numeric:tabular-nums}
+.stat .small{font-size:13px;color:var(--muted);margin-top:4px}
+.notes{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none}
+.notes li{font-size:15px;padding:8px 12px;border-radius:10px;background:var(--ice);border:1px solid var(--line)}
+.notes li.warn{border-color:color-mix(in srgb,var(--red) 45%,var(--line))}
+.rinkbox{width:100%;overflow:hidden}
+svg{overflow:hidden}
+.rinkbox svg{width:100%;height:auto;display:block}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--muted);align-items:center}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.legend svg{width:26px;height:8px}
+.who b{display:inline-grid;place-items:center;width:17px;height:17px;border-radius:50%;border:1.5px solid var(--ink);font-family:var(--display);font-size:12px;color:var(--ink);background:var(--surface)}
+.who b.d{border-color:var(--red);color:var(--red)}
+.who b.c{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.who b.gk{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.figwrap{overflow:hidden;padding:10px 14px 0;display:flex;justify-content:center}
+.drillfig{display:block;width:100%;height:auto}
+.timeline{display:flex;height:34px;border-radius:9px;overflow:hidden;border:1px solid var(--line);font-size:12px;font-weight:600}
+.timeline div{display:flex;align-items:center;justify-content:center;white-space:nowrap;overflow:hidden;color:#fff;padding:0 4px}
+.stations{display:grid;grid-template-columns:1fr;gap:12px}
+@media (min-width:640px){.stations{grid-template-columns:1fr 1fr}}
+.st{min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.st-head{display:flex;align-items:center;gap:10px;padding:12px 14px 0}
+.badge{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:#fff;font-family:var(--display);font-weight:700;font-size:20px;flex:none}
+.st-meta{font-size:13px;color:var(--muted);line-height:1.3}
+.st-body{padding:10px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--chip);color:var(--ink)}
+.tag.self{background:transparent;border:1px dashed var(--muted);color:var(--muted)}
+.tag.ha{background:color-mix(in srgb,var(--red) 16%,transparent);color:var(--ink)}
+.star{flex:none;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--ice);color:var(--muted);font-size:22px;line-height:1;cursor:pointer}
+.star[aria-pressed="true"]{color:#D99A00;border-color:#D99A00;background:color-mix(in srgb,#F2B705 14%,var(--surface))}
+.st-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto}
+.swap.mute{color:var(--muted)}
+.pickl{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.pick{width:100%;font:inherit;font-size:16px;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--ice);color:var(--ink)}
+.libnum{font-size:17px;font-weight:600}
+.libnum .big{font-family:var(--display);font-size:40px;font-weight:700;line-height:1;margin-right:4px;font-variant-numeric:tabular-nums}
+.libsub{color:var(--muted);font-size:14px}
+.libcats{display:flex;flex-wrap:wrap;gap:6px}
+.liblist{display:flex;flex-direction:column;gap:8px}
+.lib-item{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 10px 10px 14px}
+.lib-item.off .ln{text-decoration:line-through;color:var(--muted)}
+.lib-item summary{cursor:pointer;list-style:none;display:flex;flex-direction:column;gap:2px;padding-block:2px}
+.lib-item summary::-webkit-details-marker{display:none}
+.ln{font-family:var(--display);font-weight:700;font-size:19px;line-height:1.15}
+.ln::after{content:" ▾";color:var(--muted);font-size:14px}
+details[open] .ln::after{content:" ▴"}
+.lm{font-size:13px;color:var(--muted)}
+.lib-body{display:flex;flex-direction:column;gap:8px;padding-top:10px}
+.lib-body p{margin:0;font-size:15px}.lib-body ul{margin:0;padding-left:18px;font-size:14px;color:var(--muted)}
+.lib-body .drillfig{margin-inline:auto}
+.lib-actions{display:flex;flex-direction:column;gap:6px;align-items:center}
+.nobtn{border:1px solid var(--line);background:var(--ice);color:var(--muted);border-radius:9px;padding:5px 8px;font:inherit;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
+.nobtn[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.libseg button{font-size:16px;white-space:nowrap;padding:0 4px}
+.empty{color:var(--muted);margin:0}
+[hidden]{display:none!important}
+.tabpane{display:flex;flex-direction:column;gap:18px}
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:10;display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--surface);border-top:1px solid var(--line);padding:6px 12px calc(6px + env(safe-area-inset-bottom, 0px))}
+.tabbar button{border:0;background:transparent;color:var(--muted);font-family:var(--body);font-size:13px;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 4px;cursor:pointer;border-radius:10px}
+.tabbar button svg{width:26px;height:26px}
+.tabbar button[aria-selected="true"]{color:var(--accent)}
+.create{width:100%;padding:16px 18px;font-size:22px}
+.recap{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;font-size:15px}
+.recap b{font-family:var(--display);font-size:20px;font-variant-numeric:tabular-nums}
+.recap .edit{margin-left:auto;border:0;background:transparent;color:var(--accent);font:inherit;font-weight:600;cursor:pointer;padding:4px 0}
+.tbcount{font-weight:500;font-variant-numeric:tabular-nums}
+.wrap{padding-bottom:110px !important}
+.srclink{font-size:14px;font-weight:600;color:var(--accent);text-decoration:none}
+.srclink:hover{text-decoration:underline}
+.tag.gk{background:color-mix(in srgb,var(--blue) 18%,transparent);color:var(--ink)}
+.st p{margin:0;font-size:15px}
+.st ul{margin:0;padding-left:18px;font-size:14px;color:var(--muted)}
+.swap{align-self:flex-start;border:1px solid var(--line);background:var(--ice);color:var(--accent);border-radius:9px;padding:7px 12px;font-family:var(--body);font-weight:600;font-size:14px;cursor:pointer;margin-top:auto}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;font-size:15px}
+th,td{padding:9px 8px;text-align:center;border-bottom:1px solid var(--line)}
+th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+td:first-child,th:first-child{text-align:left;white-space:nowrap;padding-left:12px}
+tr:last-child td{border-bottom:0}
+.g{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:8px;background:var(--chip);font-family:var(--display);font-weight:700;font-size:18px}
+.bookend{display:grid;grid-template-columns:1fr;gap:12px}
+@media (min-width:640px){.bookend{grid-template-columns:1fr 1fr}}
+.bk{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:6px}
+.bk .when{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.bk p{margin:0;font-size:15px}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.primary{border:0;background:var(--red);color:#fff;border-radius:12px;padding:12px 18px;font-family:var(--display);font-weight:700;font-size:19px;letter-spacing:.04em;cursor:pointer;text-transform:uppercase}
+.howto{font-size:14px;color:var(--muted)}
+.howto ol{margin:6px 0 0;padding-left:20px}
+.sec{display:flex;flex-direction:column;gap:10px}
+@media (prefers-reduced-motion:no-preference){.st,.stat{transition:border-color .2s}}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">VisbyRoma · Team 15</div>
+    <h1 id="h1">Träningsplan</h1>
+    <p class="sub" id="sub">Fyll i vilka som är på isen. Du får stationer, gruppstorlekar, rotation och övningar.</p>
+  </header>
+
+  <div id="tab-setup" class="tabpane">
+  <section class="panel" aria-label="Uppgifter om träningen">
+    <div class="inputs">
+      <div class="field">
+        <label class="lbl" for="players">Utespelare</label>
+        <div class="stepper"><button type="button" data-step="players:-1" aria-label="Färre utespelare">−</button><input id="players" type="number" inputmode="numeric" min="0" max="40"><button type="button" data-step="players:1" aria-label="Fler utespelare">+</button></div>
+      </div>
+      <div class="field">
+        <label class="lbl" for="goalies">Målvakter</label>
+        <div class="stepper"><button type="button" data-step="goalies:-1" aria-label="Färre målvakter">−</button><input id="goalies" type="number" inputmode="numeric" min="0" max="4"><button type="button" data-step="goalies:1" aria-label="Fler målvakter">+</button></div>
+      </div>
+      <div class="field">
+        <label class="lbl" for="coaches">Tränare som leder övningar</label>
+        <div class="stepper"><button type="button" data-step="coaches:-1" aria-label="Färre tränare">−</button><input id="coaches" type="number" inputmode="numeric" min="0" max="10"><button type="button" data-step="coaches:1" aria-label="Fler tränare">+</button></div>
+      </div>
+    </div>
+    <div class="row2">
+      <div class="field">
+        <span class="lbl" id="ice-l">Is</span>
+        <div class="seg" role="group" aria-labelledby="ice-l">
+          <button type="button" id="ice-full" data-ice="full">Hel is</button>
+          <button type="button" id="ice-half" data-ice="half">Halv is</button>
+        </div>
+      </div>
+      <div class="field">
+        <span class="lbl" id="len-l">Istid</span>
+        <div class="seg" role="group" aria-labelledby="len-l" id="lens"></div>
+      </div>
+    </div>
+    <div class="field">
+      <span class="lbl" id="src-l">Övningar från</span>
+      <div class="seg" role="group" aria-labelledby="src-l">
+        <button type="button" id="src-all" data-src="all">Alla</button>
+        <button type="button" id="src-ha" data-src="ha">Hockeyakademin</button>
+      </div>
+    </div>
+    <div class="field">
+      <span class="lbl">Fokus i dag (valfritt)</span>
+      <div class="chips" id="focus"></div>
+    </div>
+  </section>
+
+  <section class="summary" id="summary" aria-label="Sammanfattning"></section>
+  <ul class="notes" id="notes"></ul>
+
+  <button type="button" class="primary create" id="create" data-tab="plan">Skapa träning →</button>
+  <section class="panel howto">
+    <strong style="color:var(--ink)">Lägg appen på din iPhone</strong>
+    <ol>
+      <li>Öppna länken till sidan i Safari.</li>
+      <li>Tryck på Dela-knappen och sedan ”Lägg till på hemskärmen”.</li>
+      <li>Den öppnas som en app. Dina senaste siffror sparas på telefonen.</li>
+    </ol>
+  </section>
+  </div>
+  <div id="tab-plan" class="tabpane" hidden>
+  <div class="recap" id="recap"></div>
+  <section class="panel" aria-label="Rinkens upplägg">
+    <h2>Upplägg på isen</h2>
+    <div class="rinkbox" id="rink"></div>
+    <div class="legend" aria-label="Teckenförklaring">
+      <span><svg viewBox="0 0 26 8"><path d="M1 4H21" stroke="var(--ink)" stroke-width="1.2"/><path d="M25 4L20 1.5V6.5Z" fill="var(--ink)"/></svg>Skridsko</span>
+      <span><svg viewBox="0 0 26 8"><path d="M1 4Q3 1.5 5 4T9 4T13 4T17 4T21 4" fill="none" stroke="var(--ink)" stroke-width="1.2"/><path d="M25 4L20 1.5V6.5Z" fill="var(--ink)"/></svg>Med puck</span>
+      <span><svg viewBox="0 0 26 8"><path d="M1 4H21" stroke="var(--blue)" stroke-width="1.2" stroke-dasharray="3 2"/><path d="M25 4L20 1.5V6.5Z" fill="var(--blue)"/></svg>Passning</span>
+      <span><svg viewBox="0 0 26 8"><path d="M1 4H21" stroke="var(--red)" stroke-width="2"/><path d="M25 4L19 1V7Z" fill="var(--red)"/></svg>Skott</span>
+      <span><svg viewBox="0 0 10 10" style="width:12px"><path d="M5 1L9 8.5H1Z" fill="#E8742A"/></svg>Kon</span>
+      <span class="who"><b>X</b>Spelare</span><span class="who"><b class="d">O</b>Försvarare</span><span class="who"><b class="c">T</b>Tränare</span><span class="who"><b class="gk">M</b>Målvakt</span>
+    </div>
+    <div class="timeline" id="timeline" aria-label="Tidslinje för träningen"></div>
+  </section>
+
+  <section class="sec">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+      <h2>Stationer</h2>
+      <button type="button" class="primary" id="shuffle">Nya övningar</button>
+    </div>
+    <div class="stations" id="stations"></div>
+  </section>
+
+  <section class="sec">
+    <h2>Rotation</h2>
+    <div class="tablewrap"><table id="rot"></table></div>
+    <p id="groups" style="margin:0;color:var(--muted);font-size:14px"></p>
+  </section>
+
+  <section class="sec">
+    <h2>Start &amp; avslutning</h2>
+    <div class="bookend" id="bookend"></div>
+  </section>
+
+  </div>
+  <div id="tab-lib" class="tabpane" hidden>
+  <section class="sec" id="library">
+    <div class="panel" id="libcount"></div>
+    <div class="seg libseg" role="group" aria-label="Visa">
+      <button type="button" id="lib-all" data-lib="all">Alla</button>
+      <button type="button" id="lib-fav" data-lib="fav">★ Favoriter</button>
+      <button type="button" id="lib-no" data-lib="no">Bortvalda</button>
+    </div>
+    <div class="liblist" id="liblist"></div>
+  </section>
+
+  <p class="howto" style="margin:0">Favoriter och bortvalda övningar sparas på den här telefonen. Övningar märkta Hockeyakademin är beskrivna med egna ord utifrån <a class="srclink" href="https://hockeyakademin.se/ovningar" target="_blank" rel="noopener">Hockeyakademins övningsbank</a> (Svenska Ishockeyförbundet &amp; Svenska Spel). Originalen har video och PDF.</p>
+
+  </div>
+</div>
+<nav class="tabbar" role="tablist" aria-label="Flikar">
+  <button type="button" role="tab" id="tb-setup" data-tab="setup" aria-controls="tab-setup"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="16" cy="7" r="2.2" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="10" cy="17" r="2.2" fill="none" stroke="currentColor" stroke-width="1.7"/></svg>Upplägg</button>
+  <button type="button" role="tab" id="tb-plan" data-tab="plan" aria-controls="tab-plan"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="6" width="19" height="12" rx="6" fill="none" stroke="currentColor" stroke-width="1.8"/><line x1="12" y1="6" x2="12" y2="18" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="2.2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>Träning</button>
+  <button type="button" role="tab" id="tb-lib" data-tab="lib" aria-controls="tab-lib"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h5v14H4zM10.5 5h4v14h-4zM16 6.2l3.6-1 3 13.4-3.6 1z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>Övningar <span class="tbcount" id="tbcount"></span></button>
+</nav>
+
+<script>
+(function(){
+document.documentElement.lang="sv";
+const CATS={skate:"Skridskoåkning",puck:"Puckföring",pass:"Passningar",shoot:"Skott",battle:"Närkamp & spel"};
+// areas: net = zon med mål, corner = del av zon utan mål, neutral = mittzon
+const DRILLS=[
+ {id:"s1",cat:"skate",name:"Cirkelskär",areas:["net","corner"],min:2,coach:false,desc:"Spelarna åker efter varandra runt tekningscirkeln: ett varv på innerskär, ett varv på ytterskär, sedan byte av riktning.",pts:["Böj på knäna, vikten över skäret","Klubban i isen, blicken upp"]},
+ {id:"s2",cat:"skate",name:"Stopp-och-start-stege",areas:["neutral","net"],min:2,coach:true,desc:"Led om 2–3. Åk till första konen, hockeystopp med ansiktet mot tränaren, tillbaka till start, sedan till nästa kon. Byt stoppsida varje gång.",pts:["Stoppa åt båda hållen","Korta, snabba skär ut ur stoppet"]},
+ {id:"s3",cat:"skate",name:"Vändningar runt koner",areas:["neutral","corner"],min:2,coach:false,desc:"Koner i sicksack. Framlänges till en kon, vänd till baklänges, baklänges till nästa, vänd framlänges igen. Genom hela banan och tillbaka.",pts:["Öppna höften i vändningen","Blicken framåt, inte på fötterna"]},
+ {id:"s4",cat:"skate",name:"Åtta med överskär",areas:["net","corner"],min:2,coach:false,desc:"Åk en åtta runt två tekningspunkter eller koner med överskär i varje sväng. Andra varvet med puck.",pts:["Tryck ifrån med undre benet","Luta inre axeln in i svängen"]},
+ {id:"s5",cat:"skate",name:"Pucktagen",areas:["corner","neutral"],min:4,coach:false,desc:"Alla har en puck på en liten yta. Två tagare utan puck jagar; den som blir tagen blir tagare. Rundor på 45 sekunder.",pts:["Håll pucken nära när du smiter","Byt fart och riktning"]},
+ {id:"p1",cat:"puck",name:"Konslalom",areas:["neutral","corner"],min:2,coach:false,desc:"En rad koner med 1,5 m mellanrum. Puckför forehand–backhand genom banan, med en hand på klubban tillbaka.",pts:["Mjuka händer, bladet över pucken","Blicken upp mellan konerna"]},
+ {id:"p2",cat:"puck",name:"Hinderbana med klubbor",areas:["neutral","corner","net"],min:2,coach:false,desc:"Klubbor och koner på isen. Dra pucken över en klubba, skicka den under en klubba medan du kliver över, snäv sväng runt en kon.",pts:["Skydda pucken i svängarna","Börja lugnt, öka sedan farten"]},
+ {id:"p3",cat:"puck",name:"Blicken upp – siffror",areas:["neutral","corner","net"],min:2,coach:true,desc:"Spelarna puckför medan de glider mot tränaren. Tränaren håller upp fingrar och spelarna ropar siffran. Byt siffra snabbare för varje gång.",pts:["Känn pucken, titta inte på den","Brett grepp för kontroll"]},
+ {id:"p4",cat:"puck",name:"Puckskydd i cirkeln",areas:["net","corner"],min:2,coach:true,desc:"1 mot 1 inne i en tekningscirkel. Puckföraren håller pucken i 20 sekunder med kroppen mellan försvararen och pucken. Byt roller.",pts:["Bred stans, låg höft","Pucken på andra sidan från försvararen"]},
+ {id:"p5",cat:"puck",name:"Dragning genom portar",areas:["neutral","corner"],min:2,coach:false,desc:"Konpar som smala portar. Dra pucken genom varje port, växla mellan forehand- och backhandsidan.",pts:["Dra, skjut inte","Händerna ut från kroppen"]},
+ {id:"a1",cat:"pass",name:"Parpassning i fart",areas:["neutral"],min:2,coach:false,desc:"Par åker bredvid varandra över ytan och passar fram och tillbaka. Forehand åt ena hållet, backhand tillbaka.",pts:["Passa framför kompisen","Visa var du vill ha pucken med bladet"]},
+ {id:"a2",cat:"pass",name:"Triangelpassning",areas:["neutral","corner","net"],min:3,coach:false,desc:"Tre spelare 4–5 m från varandra. Passa och flytta till den lediga platsen. Byt riktning när det blåses.",pts:["Ta emot med mjuka händer","Rör dig direkt efter passningen"]},
+ {id:"a3",cat:"pass",name:"Passa och följ i fyrkant",areas:["neutral"],min:4,coach:true,desc:"Fyra koner i en fyrkant, spelare vid varje hörn. Passa till nästa hörn och följ efter din passning. Lägg till en andra puck när det flyter.",pts:["Platta, hårda passningar","Ropa på pucken"]},
+ {id:"a4",cat:"pass",name:"Väggspel mot sargen",areas:["corner"],min:2,coach:true,desc:"Passa till tränaren eller studsa pucken mot sargen, åk ut i ledig yta, ta emot returpassningen och för pucken till konen.",pts:["Passa och åk direkt","Klubban i isen för returen"]},
+ {id:"a5",cat:"pass",name:"Lyftpass över klubba",areas:["neutral","corner"],min:2,coach:false,desc:"Par 3–4 m från varandra med en klubba på isen emellan. Lyft pucken över så att den landar platt.",pts:["Rulla pucken från hälen till toppen","Litet lyft, inget skott"]},
+ {id:"h1",cat:"shoot",name:"Handledsskott från slottet",areas:["net"],min:2,coach:true,desc:"Led vid toppen av cirkeln. Tränaren passar från hörnet, spelaren tar emot i slottet och skjuter handledsskott. Målvakten gör sig redo mellan skotten.",pts:["För över vikten till främre foten","Följ igenom mot målet"]},
+ {id:"h2",cat:"shoot",name:"Cirkelsväng och skott",areas:["net"],min:2,coach:false,desc:"För pucken runt tekningscirkeln, sväng in mot mitten och skjut. Växla cirkel varje gång.",pts:["Skjut i farten","Välj en plats innan du skjuter"]},
+ {id:"h3",cat:"shoot",name:"Returjakt",areas:["net"],min:2,coach:true,desc:"Tränaren skjuter från blålinjen. Två spelare tävlar från tekningsstrecken om returen; först att göra mål eller rensa vinner.",pts:["Klubban i isen framför mål","Vinn innerpositionen"]},
+ {id:"h4",cat:"shoot",name:"Väggspel och skott",areas:["net"],min:3,coach:true,desc:"Passa till tränaren vid sargen, åk mot mål, ta emot returpassningen och skjut snabbt.",pts:["Gör dig spelbar i slottet","Snabbt avslut"]},
+ {id:"h5",cat:"shoot",name:"Friläge med finta",areas:["net"],min:2,coach:false,desc:"Starta vid blålinjen, åk in ensam och prova en forehand–backhand-finta mot målvakten.",pts:["Håll farten mot mål","Bred finta, sträck ut långt"]},
+ {id:"b1",cat:"battle",name:"1 mot 1 i hörnet",areas:["corner","net"],min:2,coach:true,desc:"Tränaren slår in pucken i hörnet. Två spelare tävlar om den; vinnaren försöker nå en målkon eller målet.",pts:["Kroppsposition först, pucken sen","Klubba mot klubba"]},
+ {id:"b2",cat:"battle",name:"Kung i cirkeln",areas:["net","corner"],min:4,coach:false,desc:"Alla med puck inne i en tekningscirkel. Skydda din puck och peta ut de andras. Sista spelaren med puck vinner.",pts:["Blicken upp, se motståndarna","Skydda med kroppen"]},
+ {id:"b3",cat:"battle",name:"2 mot 2 smålagsspel",areas:["neutral","net","corner"],min:4,coach:true,desc:"Två småmål eller konmål, 2 mot 2 med byten var 40:e sekund. Väntande spelare redo vid sargen.",pts:["Stötta puckföraren","Snabba byten"]},
+ {id:"b4",cat:"battle",name:"3 mot 1 behålla puck",areas:["neutral","corner"],min:4,coach:false,desc:"Tre anfallare håller pucken borta från en försvarare i en liten ruta. Försvararen som vinner pucken byter in sig.",pts:["Gör trianglar","Korta, snabba passningar"]},
+ {id:"b5",cat:"battle",name:"Kamp framför mål",areas:["net"],min:3,coach:true,desc:"Tränaren skjuter från blålinjen; en anfallare skymmer eller styr, en försvarare boxar ut.",pts:["Klubban i isen","Försvarare: kroppen mellan anfallaren och målet"]},
+ {id:"ha1",cat:"pass",name:"Åttan med passningar",src:"https://hockeyakademin.se/ovningar/attan-med-passningar",areas:["neutral","corner","net"],min:2,coach:false,desc:"Par med två koner. En spelare står still med puck, den andra åker en åtta runt konerna och får en passning varje varv. Variant: vänd till baklänges runt konerna. Byt roller.",pts:["Böjda knän och balans i de snäva svängarna","Blicken upp för att se passningen"]},
+ {id:"ha2",cat:"skate",name:"Skridskobana huller om buller",src:"https://hockeyakademin.se/ovningar/skridskobana",areas:["neutral","corner","net"],min:2,coach:false,desc:"Hinder och koner utspridda utan bestämd bana. Spelarna väljer själva väg och provar olika svängar, vändningar och övergångar. Flytta hindren då och då.",pts:["Uppmuntra spelarna att prova nya rörelser","Blicken upp för att läsa av omgivningen"]},
+ {id:"ha3",cat:"puck",name:"Teknikbana med skott",src:"https://hockeyakademin.se/ovningar/teknikbana-med-skott",areas:["net"],min:2,coach:false,desc:"Utspridda hinder framför mål. Spelarna tar sig igenom med puck på eget sätt, med svängar, vändningar och fintar, och avslutar med skott.",pts:["Tränaren visar olika fintar och vändningar","Variera var hindren står"]},
+ {id:"ha4",cat:"puck",name:"Långa åkningar – teknikbana",src:"https://hockeyakademin.se/ovningar/langa-akningar-teknikbana",areas:["net"],min:2,coach:true,desc:"Hinderbana med puck mot mål. Tränaren är ett rörligt hinder före skottet, och spelaren måste ta sig förbi tränaren innan avslutet.",pts:["Blicken upp så mycket som möjligt","Prova olika fintar och vändningar"]},
+ {id:"ha5",cat:"skate",name:"Grundskär: glid, balans och stopp",src:"https://hockeyakademin.se/ovningar/skridskoakning-tekniska-grunder",areas:["neutral","corner","net"],min:2,coach:true,desc:"Över ytan i led: glid på två skridskor, glid på en skridsko, huka ihop i glid (”köttbullen”), tryckstart samt plogstopp och hockeystopp. Tränaren visar varje moment först.",pts:["Låg fart först, öka sedan","Blanda lätta och svåra moment"]},
+ {id:"ha6",cat:"skate",name:"Överskär och övergångar i cirkel",src:"https://hockeyakademin.se/ovningar/skridskoakning-tekniska-grunder-del-3",areas:["net","corner"],min:2,coach:true,desc:"Runt en tekningscirkel eller koner: överskär framlänges och baklänges, övergång från fram- till baklänges, och en åtta i båda riktningarna. Lägg till puck när det sitter.",pts:["Böjda knän och balans","Öka tempot efter hand"]},
+ {id:"ha7",cat:"battle",name:"Närkamp i par",src:"https://hockeyakademin.se/ovningar/narkampsspel",areas:["neutral","corner"],min:2,coach:true,desc:"Par åker bredvid varandra och trycker lätt mot varandra. Tränaren ropar blålinjen eller röda linjen: paret stoppar där och åker tillbaka. Gör det också längs sargen.",pts:["Bred, låg ställning med bra balans","Fråga: Hur ser du på den situationen?"]},
+ {id:"ha8",cat:"battle",name:"Smålagsspel med konmål",src:"https://hockeyakademin.se/ovningar/smalagsspel-konspel",areas:["neutral","corner","net"],min:4,coach:false,desc:"Konmål i varje ände. Spela 2 mot 2 upp till 4 mot 4, gärna med ojämna lag som 3 mot 2. Långa matcher utan byten, eller byten var 30–40 sekund om ni är många.",pts:["Låt spelet lära ut","Korta, enkla instruktioner i pauserna"]},
+ {id:"ha9",cat:"battle",name:"Smålagsspel mot ett mål",src:"https://hockeyakademin.se/ovningar/smalagsspel-ett-mal",areas:["net"],min:4,coach:true,desc:"Båda lagen anfaller samma mål. Variant: ett lag anfaller och ett försvarar. 2 mot 2 upp till 4 mot 4, byten var 30–40 sekund.",pts:["Uppmuntra under spelet och vid byten","Byt lagstorlek för nya situationer"]},
+ {id:"ha10",cat:"battle",name:"1 mot 1 längs sargen och i cirkeln",src:"https://hockeyakademin.se/ovningar/stationstraning-4-ytor",areas:["net","corner"],min:2,coach:true,desc:"Del 1: 1 mot 1 på en liten yta längs sargen där den ena täcker pucken och den andra försöker vinna den. Del 2: samma sak inne i en tekningscirkel.",pts:["Blicken upp","Tävla på riktigt i varje duell"]},
+ {id:"ha11",cat:"battle",name:"2 mot 2 från hörnen",src:"https://hockeyakademin.se/ovningar/stationstraning-4-ytor",areas:["net"],min:4,coach:true,desc:"Tränaren spelar in pucken. Två anfallare mot två försvarare i ungefär 15 sekunder, sedan nästa fyra.",pts:["Försvar: bladet mot pucken, rensa zonen","Anfall: stötta puckföraren och hitta ytor"]},
+ {id:"ha12",cat:"shoot",name:"Skott mot sargen",src:"https://hockeyakademin.se/ovningar/skott-mot-sarg",areas:["corner"],min:2,coach:false,desc:"Spelarna skjuter mot sargen i stället för mot mål. Det ger många skott och passar bra när det är få målvakter. Skjut dragskott med fokus på kroppsställningen.",pts:["Dra pucken, för över vikten och skjut","Följ igenom mot en punkt på sargen"]}
+];
+const WARMUPS={
+ full:[{name:"Flytåkning + rörlighet",desc:"Varv runt hela rinken: framlänges, baklänges, överskär i hörnen. Stanna vid mitten för bensvingar och höftöppnare."},
+       {name:"Åtta med puck",desc:"Alla med puck. Åk en åtta genom båda zonerna, överskär runt varje tekningscirkel, snäv sväng vid blålinjerna."}],
+ half:[{name:"Cirkelflyt",desc:"Åk de två tekningscirklarna på er halva som en åtta, framlänges och sedan baklänges. Stanna för rörlighetsövningar i mitten."},
+       {name:"Puckuppvärmning i zonen",desc:"Alla med puck inne i zonen. Fri puckföring; en vissla = snäv sväng, två visslor = hockeystopp."}]
+};
+const FINISH={
+ full:[{name:"Tvärspel",desc:"Två matcher samtidigt, en i varje zon, 3 mot 3 eller 4 mot 4 med småmål på tvären. Byten var 45:e sekund."},
+       {name:"Hajar och fiskar",desc:"Alla spelare med puck på ena sidan av mittzonen; 2–3 hajar försöker ta puckar när fiskarna åker över. Tappad puck = du blir haj."}],
+ half:[{name:"Tvärspel",desc:"3 mot 3 på tvären i er zon med två småmål. Väntande spelare vid blålinjen; byte var 45:e sekund när det blåses."},
+       {name:"Sista pucken kvar",desc:"Alla med puck inne i zonen. Skydda din egen puck, peta ut andras. Utslagna gör en snabb övning vid sargen och kommer tillbaka in."}]
+};
+const COLORS=["var(--s1)","var(--s2)","var(--s3)","var(--s4)","var(--s5)","var(--s6)"];
+// Zones on a 200 x 85 rink. Half ice shows the left half (0-100).
+const Z={
+ endL:{x:0,y:0,w:75,h:85,type:"net",label:"Vänster zon"},
+ endR:{x:125,y:0,w:75,h:85,type:"net",label:"Höger zon"},
+ neut:{x:75,y:0,w:50,h:85,type:"neutral",label:"Mittzon"},
+ neutT:{x:75,y:0,w:50,h:42.5,type:"neutral",label:"Mittzon, övre halvan"},
+ neutB:{x:75,y:42.5,w:50,h:42.5,type:"neutral",label:"Mittzon, nedre halvan"},
+ LT:{x:0,y:0,w:75,h:42.5,type:"net",label:"Vänster zon, övre (målsidan)"},
+ LB:{x:0,y:42.5,w:75,h:42.5,type:"corner",label:"Vänster zon, nedre hörnet"},
+ RT:{x:125,y:0,w:75,h:42.5,type:"corner",label:"Höger zon, övre hörnet"},
+ RB:{x:125,y:42.5,w:75,h:42.5,type:"net",label:"Höger zon, nedre (målsidan)"},
+ half1:{x:0,y:0,w:100,h:85,type:"net",label:"Er halva"},
+ hEnd:{x:0,y:0,w:75,h:85,type:"net",label:"Zonen"},
+ hNeut:{x:75,y:0,w:25,h:85,type:"neutral",label:"Blålinjen till röda linjen"}
+};
+const LAYOUT={
+ full:{1:["endL"],2:["endL","endR"],3:["endL","neut","endR"],4:["endL","neutT","neutB","endR"],5:["LT","LB","neut","RT","RB"],6:["LT","LB","neutT","neutB","RT","RB"]},
+ half:{1:["half1"],2:["hEnd","hNeut"],3:["LT","LB","hNeut"]}
+};
+
+const DEF={players:16,goalies:2,coaches:3,ice:"full",mins:60,focus:[],seed:1,swaps:{},src:"all",fav:[],no:[],pick:{},lib:"all"};
+let S;
+try{S=Object.assign({},DEF,JSON.parse(localStorage.getItem("t15plan")||"{}"));}catch(e){S=Object.assign({},DEF);}
+S.swaps=S.swaps||{};S.fav=S.fav||[];S.no=S.no||[];S.pick=S.pick||{};S.lib=S.lib||"all";
+const openLib=new Set();
+function setTab(t,scroll){if(!["setup","plan","lib"].includes(t))t="setup";S.tab=t;
+  const H={setup:["Upplägg","Fyll i vilka som är på isen. Appen räknar ut stationer och gruppstorlekar."],plan:["Träningen","Rinken, övningarna på varje station, rotation och start och avslutning."],lib:["Övningsbibliotek","Alla övningar appen kan föreslå. Spara favoriter med ☆ och välj bort det ni inte vill köra."]};
+  $("h1").textContent=H[t][0];$("sub").textContent=H[t][1];
+  ["setup","plan","lib"].forEach(k=>{$("tab-"+k).hidden=k!==t;$("tb-"+k).setAttribute("aria-selected",k===t);});
+  try{if(scroll)window.scrollTo(0,0);}catch(e){}save();}
+function save(){try{localStorage.setItem("t15plan",JSON.stringify(S));}catch(e){}}
+
+function rng(seed){let a=seed>>>0;return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function build(){
+  const skaters=Math.max(0,S.players|0), goalies=Math.max(0,S.goalies|0), coaches=Math.max(0,S.coaches|0);
+  const notes=[];
+  if(coaches===0) notes.push({w:1,t:"Ingen tränare angiven. Planen utgår från att en vuxen på isen leder träningen."});
+  const maxIce=S.ice==="full"?(skaters>=18?6:5):3;
+  let coached=Math.max(1,Math.min(coaches||1,maxIce));
+  let n=coached;
+  while(n>1 && skaters/n<3) n--;
+  coached=Math.min(coached,n);
+  let self=0; const selfMax=S.ice==="full"?2:1;
+  while(skaters/n>7 && n<maxIce && self<selfMax){n++;self++;}
+  if(skaters/n>8) notes.push({w:1,t:`Grupperna blir stora (${Math.ceil(skaters/n)} spelare). ${S.ice==="half"?"Halv is ger max 3 stationer.":""} Fler tränare gör att ni kan dela upp i mindre grupper.`});
+  if(coaches>coached) notes.push({w:0,t:`${coaches-coached} extra tränare: hjälp till i den största gruppen, jobba med målvakterna eller lägg puckar vid skottstationen.`});
+  if(self>0) notes.push({w:0,t:`${self} station${self>1?"er körs":" körs"} utan tränare. Utse en spelare som leder och förklara övningen innan rotationen börjar.`});
+  if(skaters<3) notes.push({w:1,t:"Väldigt få utespelare: kör hela gruppen tillsammans på en station."});
+
+  // group sizes
+  const sizes=[];const base=Math.floor(skaters/n),rem=skaters%n;
+  for(let i=0;i<n;i++) sizes.push(base+(i<rem?1:0));
+  const minG=Math.min(...sizes);
+
+  // stations
+  const keys=LAYOUT[S.ice][n];
+  const st=keys.map((k,i)=>Object.assign({},Z[k],{i,coached:true,goalie:false}));
+  // self-running stations: prefer neutral, then corner, then net
+  const pref=[...st].sort((a,b)=>({neutral:0,corner:1,net:2}[a.type])-({neutral:0,corner:1,net:2}[b.type]));
+  for(let j=0;j<self;j++) pref[j].coached=false;
+  // goalies stay at net stations
+  const nets=st.filter(s=>s.type==="net");
+  let gLeft=goalies;
+  for(const s of nets){ if(gLeft>0){s.goalie=true;gLeft--;} }
+  if(gLeft>0) notes.push({w:0,t:`${gLeft} extra målvakt${gLeft>1?"er":""}: dela mål vid en skottstation och byt med några minuters mellanrum.`});
+  if(goalies===0 && nets.length) notes.push({w:0,t:"Inga målvakter i dag: skottstationerna skjuter på tomt mål med mål-lappar eller koner i hörnen."});
+
+  // drills
+  const R=rng(S.seed*7919+n*31+(S.ice==="full"?1:2));
+  const used={};
+  const order=[...st].sort((a,b)=>(b.goalie-a.goalie)||(a.i-b.i));
+  for(const s of order){
+    const ok=d=>d.areas.includes(s.type)&&d.min<=Math.max(2,minG)&&(s.coached||!d.coach);
+    const allowed=d=>ok(d)&&!S.no.includes(d.id);
+    let cand=DRILLS.filter(d=>allowed(d)&&(S.src!=="ha"||d.src));
+    if(!cand.length)cand=DRILLS.filter(allowed);
+    if(!cand.length)cand=DRILLS.filter(ok);
+    s.fits=DRILLS.filter(ok);
+    const scored=cand.map(d=>({d,sc:R()+(S.focus.includes(d.cat)?1.6:0)+(s.goalie&&(d.cat==="shoot"||(FIG[d.id]||[]).some(e=>e[0]==="s"&&e.includes("N")))?2.2:0)-(used[d.cat]?1.3:0)+(S.fav.includes(d.id)?1.5:0)}));
+    scored.sort((a,b)=>b.sc-a.sc);
+    s.cands=scored.map(x=>x.d);
+    if(s.cands.length) used[s.cands[0].cat]=1;
+    const sw=S.swaps[s.i]||0;
+    s.drill=s.cands.length?s.cands[sw%s.cands.length]:null;
+    const pk=S.pick[s.i]&&s.fits.find(d=>d.id===S.pick[s.i]);
+    if(pk){s.drill=pk;s.manual=true;}
+  }
+
+  // time plan
+  const mins=S.mins;
+  const warm=mins>=60?10:8, fin=mins>=60?12:(mins>=50?10:8);
+  const avail=mins-warm-fin;
+  let rounds=n, stT=Math.floor((avail-(n-1))/n);
+  if(n>1 && stT<6){rounds=Math.max(1,Math.min(n,Math.floor((avail+1)/7)));stT=Math.floor((avail-(rounds-1))/rounds);
+    notes.push({w:1,t:`Istiden räcker inte för att alla grupper ska hinna alla ${n} stationer. Varje grupp gör ${rounds}; ta resten nästa träning.`});}
+  const sched=[];let t=warm;
+  for(let r=0;r<rounds;r++){sched.push([t,t+stT]);t=t+stT+(r<rounds-1?1:0);}
+  const finStart=t;
+
+  return {skaters,goalies,n,sizes,st,notes,sched,warm,finStart,mins,rounds,stT,
+    warmup:WARMUPS[S.ice][Math.floor(R()*2)],finish:FINISH[S.ice][Math.floor(R()*2)]};
+}
+
+// ---------- drill figures ----------
+// Unit coordinates: u 0 = end boards / net side, 100 = toward centre ice; v 0 = top, 100 = bottom.
+// "N" inside a path = the real net. Corner drills put the corner at (0,100).
+function circ(cx,cy,r,a0,a1,n){const o=[];n=n||12;for(let i=0;i<=n;i++){const a=(a0+(a1-a0)*i/n)*Math.PI/180;o.push(cx+r*Math.cos(a),cy+r*Math.sin(a));}return o;}
+const FIG={
+ s1:[["ring",50,52,30],["k",...circ(50,52,30,200,480,14)],["x",22,42],["x",78,62]],
+ s2:[["C",90,16],["c",30,50],["c",50,50],["c",70,50],["c",88,50],["x",10,50],["k",12,42,48,42],["k",48,58,14,58]],
+ s3:[["c",25,25],["c",42,75],["c",60,25],["c",78,75],["x",8,50],["k",10,50,25,34,42,68,60,32,78,68,92,52]],
+ s4:[["c",30,50],["c",70,50],["x",50,50],["k",50,50,65,28,86,36,88,62,68,74,50,52,32,28,14,38,12,62,32,74,46,56]],
+ s5:[["box",12,12,76,76],["x",30,30],["x",68,28],["x",35,70],["x",72,72],["h",30,30,44,22],["h",68,28,80,42],["h",35,70,22,58],["o",52,50],["k",52,50,40,38],["o",58,64],["k",58,64,68,72]],
+ p1:[["c",22,50],["c",36,50],["c",50,50],["c",64,50],["c",78,50],["x",8,50],["h",10,50,22,36,36,64,50,36,64,64,78,36,92,50]],
+ p2:[["l",25,22,25,46],["l",46,58,60,74],["c",74,24],["c",86,70],["x",8,30],["h",10,30,32,34,40,64,62,54,74,16,90,46,84,86,60,88]],
+ p3:[["C",88,50],["x",14,26],["x",14,50],["x",14,74],["h",17,26,60,36],["h",17,50,62,50],["h",17,74,60,64]],
+ p4:[["ring",50,50,34],["x",42,46],["o",60,62],["h",42,46,52,32,66,40]],
+ p5:[["c",30,20],["c",30,36],["c",55,58],["c",55,74],["c",80,20],["c",80,36],["x",8,50],["h",10,50,30,28,55,66,80,28,94,50]],
+ a1:[["x",8,28],["x",8,72],["k",10,28,92,28],["k",10,72,92,72],["a",22,70,38,30],["a",46,30,62,70],["a",70,70,86,30]],
+ a2:[["x",30,22],["x",30,78],["x",78,50],["a",33,24,75,47],["a",75,53,33,76],["a",30,74,30,26]],
+ a3:[["c",20,16],["c",80,16],["c",80,84],["c",20,84],["x",20,26],["x",80,26],["x",80,74],["x",20,74],["C",50,50],["a",24,22,76,22],["k",22,32,74,32]],
+ a4:[["C",14,84],["x",62,62],["c",84,20],["a",59,65,18,82],["k",62,58,46,42,34,38],["a",17,79,32,42],["h",36,36,80,24]],
+ a5:[["l",50,34,50,66],["x",18,50],["x",82,50],["a",21,46,50,22,79,46],["a",79,56,50,80,21,56]],
+ h1:[["C",14,12],["x",68,24],["x",76,20],["k",66,28,40,46],["a",17,15,38,43],["s",38,50,"N"]],
+ h2:[["ring",46,26,18],["x",68,12],["h",66,12,46,6,28,18,32,38,44,48],["s",42,52,"N"]],
+ h3:[["C",90,50],["x",42,22],["x",42,78],["s",87,50,"N"],["k",42,26,22,44],["k",42,74,22,56]],
+ h4:[["C",48,90],["x",82,50],["a",80,54,50,86],["k",82,46,58,36,36,46],["a",47,86,36,52],["s",34,50,"N"]],
+ h5:[["x",94,50],["h",92,50,70,40,48,58,32,44],["k",32,44,22,56],["s",22,56,"N"]],
+ b1:[["C",62,32],["a",60,36,12,90],["x",54,70],["o",70,78],["k",54,68,18,84],["k",70,80,24,94],["c",86,18]],
+ b2:[["ring",50,50,36],["x",40,38],["x",62,36],["x",42,64],["x",64,62],["h",40,38,30,50],["h",62,36,72,46],["h",64,62,56,74]],
+ b3:[["n",6,50],["n",94,50],["x",36,34],["x",40,66],["o",60,40],["o",62,62],["h",36,34,54,24],["a",42,63,52,30]],
+ b4:[["box",14,14,72,72],["x",24,24],["x",76,24],["x",50,78],["o",50,46],["a",28,24,72,24],["a",74,28,53,74],["k",50,46,58,34]],
+ ha1:[["c",35,50],["c",65,50],["x",50,90],["x",20,50],["k",20,50,35,28,50,50,65,72,82,50,65,28,50,50,35,72,22,58],["a",50,87,42,62]],
+ ha2:[["c",20,18],["c",46,30],["c",72,16],["c",30,62],["c",58,56],["c",84,44],["c",42,86],["c",76,80],["x",8,40],["k",10,40,32,40,50,46,66,70,88,64],["x",92,18],["k",90,20,62,38,38,72,18,82]],
+ ha3:[["c",30,22],["c",55,36],["c",76,16],["c",46,70],["c",80,66],["x",94,32],["h",92,32,70,28,62,52,46,42,38,56,30,48],["s",30,48,"N"]],
+ ha4:[["c",86,20],["c",70,40],["c",86,60],["c",70,80],["C",38,52],["x",95,8],["h",93,10,78,28,80,50,78,72,56,74,44,66,30,48],["s",30,48,"N"]],
+ ha5:[["c",90,22],["c",90,50],["c",90,78],["x",8,22],["x",8,50],["x",8,78],["k",10,22,86,22],["k",10,50,86,50],["k",10,78,86,78],["C",50,94]],
+ ha6:[["ring",50,50,30],["k",...circ(50,50,30,180,470,14)],["x",20,50],["C",90,88]],
+ ha7:[["x",8,32],["o",8,44],["k",10,32,80,32],["k",10,44,80,44],["x",8,78],["o",8,90],["k",10,78,70,78],["k",10,90,70,90],["C",92,60]],
+ ha8:[["c",6,40],["c",6,60],["c",94,40],["c",94,60],["x",34,30],["x",44,70],["x",30,54],["o",62,34],["o",66,66],["o",56,50],["h",34,30,54,20],["a",44,68,32,57]],
+ ha9:[["x",70,28],["x",76,70],["x",60,50],["o",40,40],["o",44,62],["h",70,28,52,20,36,30],["s",34,32,"N"]],
+ ha10:[["box",14,70,70,26],["x",40,82],["o",56,86],["h",40,82,30,88,46,92],["ring",70,34,20],["x",64,30],["o",78,40],["h",64,30,62,40,70,44]],
+ ha11:[["C",80,8],["a",78,10,12,12],["x",18,6],["x",52,30],["o",30,28],["o",42,56],["h",14,14,26,20,40,40],["a",40,40,52,34],["s",54,36,"N"]],
+ ha12:[["x",45,40],["x",62,64],["x",80,40],["s",43,40,4,36],["s",60,64,4,72],["s",78,40,40,24]],
+ b5:[["C",90,28],["s",87,30,"N"],["x",28,42],["o",20,56],["k",28,42,22,48]]
+};
+function mapper(z){
+  const full=S.ice==="full", right=(z.x+z.w/2)>100;
+  const flipU=full&&right, flipV=z.type==="corner"&&z.y===0, tr=z.h>z.w*1.4;
+  const net=right?[186.5,42.5]:[13.5,42.5];
+  const f=(u,v)=>{if(flipU)u=100-u;if(flipV)v=100-v;if(tr){const t=u;u=v;v=t;}return [z.x+z.w*(.06+.88*u/100),z.y+z.h*(.06+.88*v/100)];};
+  return {f,net,rx:r=>r*z.w*.88/100,ry:r=>r*z.h*.88/100};
+}
+function curve(P){
+  if(P.length<2)return P;
+  const out=[];const n=P.length;
+  for(let i=0;i<n-1;i++){
+    const p0=P[Math.max(i-1,0)],p1=P[i],p2=P[i+1],p3=P[Math.min(i+2,n-1)];
+    for(let s=0;s<10;s++){const t=s/10,t2=t*t,t3=t2*t;
+      out.push([0,1].map(k=>.5*((2*p1[k])+(-p0[k]+p2[k])*t+(2*p0[k]-5*p1[k]+4*p2[k]-p3[k])*t2+(-p0[k]+3*p1[k]-3*p2[k]+p3[k])*t3)));}
+  }
+  out.push(P[n-1]);return out;
+}
+function wavy(D,amp,wl){
+  let L=0;const s=[0];for(let i=1;i<D.length;i++){L+=Math.hypot(D[i][0]-D[i-1][0],D[i][1]-D[i-1][1]);s.push(L);}
+  return D.map((p,i)=>{const a=D[Math.max(i-1,0)],b=D[Math.min(i+1,D.length-1)];const dx=b[0]-a[0],dy=b[1]-a[1],l=Math.hypot(dx,dy)||1;
+    const k=amp*Math.min(1,(L-s[i])/wl,s[i]/wl*2)*Math.sin(2*Math.PI*s[i]/wl);return [p[0]-dy/l*k,p[1]+dx/l*k];});
+}
+const dstr=D=>"M"+D.map(p=>p[0].toFixed(2)+" "+p[1].toFixed(2)).join("L");
+function head(D,size,color){
+  const tip=D[D.length-1];let j=D.length-2;
+  while(j>0&&Math.hypot(tip[0]-D[j][0],tip[1]-D[j][1])<size)j--;
+  const b=D[Math.max(j,0)];const dx=tip[0]-b[0],dy=tip[1]-b[1],l=Math.hypot(dx,dy)||1,ux=dx/l,uy=dy/l;
+  const bx=tip[0]-ux*size,by=tip[1]-uy*size,w=size*.55;
+  return `<path d="M${tip[0]} ${tip[1]}L${bx-uy*w} ${by+ux*w}L${bx+uy*w} ${by-ux*w}Z" fill="${color}"/>`;
+}
+function person(x,y,kind,sz,detail){
+  const r=(detail?2.4:1.7)*sz;
+  const st={x:["var(--surface)","var(--ink)","var(--ink)","X"],o:["var(--surface)","var(--red)","var(--red)","O"],C:["var(--accent)","var(--accent)","var(--accent-ink)","T"],G:["var(--ink)","var(--ink)","var(--surface)","M"]}[kind];
+  let s=`<circle cx="${x}" cy="${y}" r="${r}" fill="${st[0]}" stroke="${st[1]}" stroke-width="${.45*sz}"/>`;
+  if(detail)s+=`<text x="${x}" y="${y+1.05*sz}" text-anchor="middle" font-family="Barlow Condensed,Arial Narrow,sans-serif" font-weight="700" font-size="${3*sz}" fill="${st[2]}">${st[3]}</text>`;
+  return s;
+}
+function drawFig(fig,z,sz,detail,goalie){
+  if(!fig)return "";
+  const M=mapper(z);let areas="",lines="",paths="",marks="",people="";
+  const pts=a=>{const o=[];for(let i=0;i<a.length;){if(a[i]==="N"){o.push(M.net);i++;}else{o.push(M.f(a[i],a[i+1]));i+=2;}}return o;};
+  for(const el of fig){
+    const t=el[0],a=el.slice(1);
+    if(t==="ring"){const [x,y]=M.f(a[0],a[1]);areas+=`<ellipse cx="${x}" cy="${y}" rx="${M.rx(a[2])}" ry="${M.ry(a[2])}" fill="none" stroke="var(--muted)" stroke-width="${.4*sz}" stroke-dasharray="${1.2*sz} ${1*sz}"/>`;}
+    else if(t==="box"){const p=[M.f(a[0],a[1]),M.f(a[0]+a[2],a[1]+a[3])];const x=Math.min(p[0][0],p[1][0]),y=Math.min(p[0][1],p[1][1]);areas+=`<rect x="${x}" y="${y}" width="${Math.abs(p[1][0]-p[0][0])}" height="${Math.abs(p[1][1]-p[0][1])}" fill="none" stroke="var(--muted)" stroke-width="${.4*sz}" stroke-dasharray="${1.2*sz} ${1*sz}"/>`;}
+    else if(t==="l"){const p=pts(a);lines+=`<line x1="${p[0][0]}" y1="${p[0][1]}" x2="${p[1][0]}" y2="${p[1][1]}" stroke="#A67C45" stroke-width="${1*sz}" stroke-linecap="round"/>`;}
+    else if(t==="c"){const [x,y]=M.f(a[0],a[1]);const c=(detail?1.9:1.4)*sz;marks+=`<path d="M${x} ${y-c}L${x+c*.9} ${y+c*.7}L${x-c*.9} ${y+c*.7}Z" fill="#E8742A"/>`;}
+    else if(t==="n"){const [x,y]=M.f(a[0],a[1]);marks+=`<rect x="${x-1.2*sz}" y="${y-2*sz}" width="${2.4*sz}" height="${4*sz}" fill="none" stroke="var(--ink)" stroke-width="${.5*sz}"/>`;}
+    else if(t==="x"||t==="o"||t==="C"){const [x,y]=M.f(a[0],a[1]);people+=person(x,y,t,sz,detail);}
+    else{
+      let D=curve(pts(a));
+      if(t==="k")paths+=`<path d="${dstr(D)}" fill="none" stroke="var(--ink)" stroke-width="${.5*sz}" stroke-linecap="round"/>`+head(D,1.9*sz,"var(--ink)");
+      if(t==="h")paths+=`<path d="${dstr(wavy(D,.8*sz,2.6*sz))}" fill="none" stroke="var(--ink)" stroke-width="${.5*sz}" stroke-linejoin="round"/>`+head(D,1.9*sz,"var(--ink)");
+      if(t==="a")paths+=`<path d="${dstr(D)}" fill="none" stroke="var(--blue)" stroke-width="${.55*sz}" stroke-dasharray="${1.5*sz} ${1*sz}"/>`+head(D,1.9*sz,"var(--blue)");
+      if(t==="s")paths+=`<path d="${dstr(D)}" fill="none" stroke="var(--red)" stroke-width="${.9*sz}"/>`+head(D,2.4*sz,"var(--red)");
+    }
+  }
+  if(goalie){const g=M.net;people+=person(g[0]+(g[0]<100?1:-1)*1.5*sz,g[1],"G",sz,detail);}
+  return areas+lines+paths+marks+people;
+}
+function rinkBase(sz){
+  const full=S.ice==="full";const w=v=>v*sz;
+  let L=`<line x1="11" y1="1" x2="11" y2="84" stroke="var(--red)" stroke-width="${w(.5)}"/><line x1="75" y1="0" x2="75" y2="85" stroke="var(--blue)" stroke-width="2"/>`;
+  if(full)L+=`<line x1="189" y1="1" x2="189" y2="84" stroke="var(--red)" stroke-width="${w(.5)}"/><line x1="125" y1="0" x2="125" y2="85" stroke="var(--blue)" stroke-width="2"/><line x1="100" y1="0" x2="100" y2="85" stroke="var(--red)" stroke-width="1.6"/><circle cx="100" cy="42.5" r="15" fill="none" stroke="var(--blue)" stroke-width="${w(.4)}"/>`;
+  else L+=`<line x1="100" y1="0" x2="100" y2="85" stroke="var(--red)" stroke-width="1.6"/>`;
+  [[31,20.5],[31,64.5]].concat(full?[[169,20.5],[169,64.5]]:[]).forEach(([x,y])=>{L+=`<circle cx="${x}" cy="${y}" r="15" fill="none" stroke="var(--red)" stroke-width="${w(.4)}" opacity=".7"/><circle cx="${x}" cy="${y}" r="1" fill="var(--red)"/>`;});
+  [[80,20.5],[80,64.5]].concat(full?[[120,20.5],[120,64.5]]:[]).forEach(([x,y])=>{L+=`<circle cx="${x}" cy="${y}" r="1" fill="var(--red)"/>`;});
+  [[7.5],[189]].slice(0,full?2:1).forEach(([x])=>{L+=`<rect x="${x}" y="39.5" width="3.5" height="6" fill="none" stroke="var(--ink)" stroke-width="${w(.6)}"/>`;});
+  return L;
+}
+function rinkClip(){return S.ice==="full"?`<rect x="0" y="0" width="200" height="85" rx="28"/>`:`<path d="M28 0 H100 V85 H28 A28 28 0 0 1 0 57 V28 A28 28 0 0 1 28 0Z"/>`;}
+function rinkEdge(sz){return S.ice==="full"?`<rect x="0" y="0" width="200" height="85" rx="28" fill="none" stroke="var(--rink)" stroke-width="${1.1*sz}"/>`:`<path d="M100 0 H28 A28 28 0 0 0 0 28 V57 A28 28 0 0 0 28 85 H100" fill="none" stroke="var(--rink)" stroke-width="${1.1*sz}"/>`;}
+
+function rinkSVG(P){
+  const full=S.ice==="full", W=full?200:100, sz=W/200*1.35;
+  let z="",figs="",badges="";
+  P.st.forEach((s,i)=>{
+    z+=`<rect x="${s.x}" y="${s.y}" width="${s.w}" height="${s.h}" fill="${COLORS[i]}" fill-opacity=".16" stroke="${COLORS[i]}" stroke-width="${.8*sz}" stroke-dasharray="${s.coached?"":(2*sz)+" "+(1.5*sz)}"/>`;
+    figs+=drawFig(s.drill&&FIG[s.drill.id],s,sz,false,s.goalie);
+    const cx=s.x+s.w/2, cy=s.y+5*sz+.5;
+    badges+=`<circle cx="${cx}" cy="${cy}" r="${4.3*sz}" fill="${COLORS[i]}"/><text x="${cx}" y="${cy+2*sz}" text-anchor="middle" font-family="Barlow Condensed,Arial Narrow,sans-serif" font-weight="700" font-size="${6*sz}" fill="#fff">${i+1}</text>`;
+  });
+  return `<svg viewBox="-1 -1 ${W+2} 87" role="img" aria-label="${full?"Hel":"Halv"} is med ${P.n} station${P.n>1?"er":""} och övningar"><defs><clipPath id="rc">${rinkClip()}</clipPath></defs>
+  <g clip-path="url(#rc)"><rect x="0" y="0" width="${W}" height="85" fill="var(--ice)"/>${z}${rinkBase(W/200)}${figs}${badges}</g>${rinkEdge(sz)}</svg>`;
+}
+function stationSVG(s,i){
+  const vx=s.x-1,vy=s.y-1,vw=s.w+2,vh=s.h+2;
+  const maxW=Math.round(230*vw/vh), ppu=Math.min(330,maxW)/vw, sz=3.2/ppu;
+  return `<svg class="drillfig" viewBox="${vx} ${vy} ${vw} ${vh}" style="aspect-ratio:${vw}/${vh};max-width:min(100%,${maxW}px)" role="img" aria-label="Skiss: ${esc(s.drill?s.drill.name:"")}"><defs><clipPath id="rc${i}">${rinkClip()}</clipPath></defs>
+  <g clip-path="url(#rc${i})"><rect x="0" y="0" width="200" height="85" fill="var(--ice)"/><rect x="${s.x}" y="${s.y}" width="${s.w}" height="${s.h}" fill="${COLORS[i]}" fill-opacity=".08"/>${rinkBase(1.6/ppu)}${drawFig(s.drill&&FIG[s.drill.id],s,sz,true,s.goalie)}</g>${rinkEdge(sz)}</svg>`;
+}
+
+function render(){
+  document.addEventListener("change",e=>{const t=e.target;if(t.dataset&&t.dataset.pick!==undefined){if(t.value)S.pick[t.dataset.pick]=t.value;else delete S.pick[t.dataset.pick];render();}});
+document.addEventListener("toggle",e=>{const t=e.target;if(t.dataset&&t.dataset.lib){const id=t.dataset.lib;
+  if(t.open){openLib.add(id);const body=t.querySelector(".lib-body");if(body&&!body.querySelector("svg")){const d=DRILLS.find(x=>x.id===id);body.insertAdjacentHTML("afterbegin",libSVG(d));}}else openLib.delete(id);}},true);
+["players","goalies","coaches"].forEach(k=>{if(document.activeElement!==$(k)) $(k).value=S[k];});
+  $("ice-full").setAttribute("aria-pressed",S.ice==="full");
+  $("ice-half").setAttribute("aria-pressed",S.ice==="half");
+  $("src-all").setAttribute("aria-pressed",S.src!=="ha");
+  $("src-ha").setAttribute("aria-pressed",S.src==="ha");
+  $("lens").innerHTML=[45,50,60,75].map(m=>`<button type="button" data-len="${m}" aria-pressed="${S.mins===m}">${m}′</button>`).join("");
+  $("focus").innerHTML=Object.entries(CATS).map(([k,v])=>`<button type="button" class="chip" data-focus="${k}" aria-pressed="${S.focus.includes(k)}">${v}</button>`).join("");
+
+  const P=build();
+  const L="ABCDEF";
+  const us=[...new Set(P.sizes)].sort((a,b)=>a-b);const sizeTxt=us.join("–");
+  $("summary").innerHTML=`
+   <div class="stat"><div class="big">${P.n}</div><div class="small">station${P.n>1?"er":""}${P.st.some(s=>!s.coached)?` · ${P.st.filter(s=>!s.coached).length} utan tränare`:""}</div></div>
+   <div class="stat"><div class="big">${P.skaters?sizeTxt:"–"}</div><div class="small">spelare per grupp</div></div>
+   <div class="stat"><div class="big">${P.stT}′</div><div class="small">per station</div></div>`;
+  $("recap").innerHTML=`<span><b>${P.n}</b> station${P.n>1?"er":""}</span><span><b>${P.skaters?sizeTxt:"–"}</b> per grupp</span><span><b>${P.stT}′</b> per station</span><span>${S.ice==="full"?"Hel is":"Halv is"} · ${S.mins} min</span><button type="button" class="edit" data-tab="setup">Ändra</button>`;
+  $("notes").innerHTML=P.notes.map(n=>`<li class="${n.w?"warn":""}">${esc(n.t)}</li>`).join("");
+  $("rink").innerHTML=rinkSVG(P);
+
+  const pct=m=>(m/P.mins*100)+"%";
+  let tl=`<div style="width:${pct(P.warm)};background:var(--blue)">Uppv.</div>`;
+  P.sched.forEach(([a,b],r)=>{tl+=`<div style="width:${pct(b-a+(r<P.sched.length-1?1:0))};background:${r%2?"#5B6B7C":"#3E4E60"}">${P.rounds<=4?"Omg. "+(r+1):r+1}</div>`;});
+  tl+=`<div style="width:${pct(P.mins-P.finStart)};background:var(--red)">Spel</div>`;
+  $("timeline").innerHTML=tl;
+
+  $("stations").innerHTML=P.st.map((s,i)=>{
+    const d=s.drill;
+    const tags=[`<span class="tag">${d?CATS[d.cat]:"Fri åkning"}</span>`];
+    if(!s.coached) tags.push(`<span class="tag self">Ingen tränare behövs</span>`);
+    if(s.goalie) tags.push(`<span class="tag gk">Målvakten stannar här</span>`);
+    if(d&&d.src) tags.push(`<span class="tag ha">Hockeyakademin</span>`);
+    if(s.manual) tags.push(`<span class="tag self">Vald av dig</span>`);
+    const fav=d&&S.fav.includes(d.id);
+    const opts=s.fits.map(x=>`<option value="${x.id}"${d&&x.id===d.id?" selected":""}>${S.fav.includes(x.id)?"★ ":""}${esc(x.name)}${S.no.includes(x.id)?" (bortvald)":""}</option>`).join("");
+    return `<article class="st">
+      <div class="st-head"><div class="badge" style="background:${COLORS[i]}">${i+1}</div>
+        <div style="flex:1;min-width:0"><h3>${d?esc(d.name):"Fri åkning"}</h3><div class="st-meta">${esc(s.label)}</div></div>
+        ${d?`<button type="button" class="star" data-fav="${d.id}" aria-pressed="${fav}" aria-label="${fav?"Ta bort från favoriter":"Spara som favorit"}">${fav?"★":"☆"}</button>`:""}</div>
+      <div class="figwrap">${stationSVG(s,i)}</div>
+      <div class="st-body"><div class="tags">${tags.join("")}</div>
+        <p>${d?esc(d.desc):""}</p>
+        ${d?`<ul>${d.pts.map(p=>`<li>${esc(p)}</li>`).join("")}</ul>`:""}
+        ${d&&d.src?`<a class="srclink" href="${d.src}" target="_blank" rel="noopener">Se originalet på Hockeyakademin ↗</a>`:""}
+        <div class="st-actions">
+          ${s.cands.length>1?`<button type="button" class="swap" data-swap="${i}">Byt övning</button>`:""}
+          ${d?`<button type="button" class="swap mute" data-no="${d.id}" data-st="${i}">Föreslå inte igen</button>`:""}
+        </div>
+        <label class="pickl" for="pick${i}">Välj övning själv</label>
+        <select class="pick" id="pick${i}" data-pick="${i}"><option value="">Låt appen föreslå</option>${opts}</select>
+      </div></article>`;
+  }).join("");
+
+  let th=`<tr><th>Tid</th>${P.st.map((s,i)=>`<th><span class="g" style="background:${COLORS[i]};color:#fff">${i+1}</span></th>`).join("")}</tr>`;
+  let rows=P.sched.map(([a,b],r)=>`<tr><td>${a}–${b} min</td>${P.st.map((s,j)=>{const g=((j-r)%P.n+P.n)%P.n;return `<td><span class="g">${L[g]}</span></td>`;}).join("")}</tr>`).join("");
+  $("rot").innerHTML=th+rows;
+  $("groups").textContent=`${P.sizes.map((z,g)=>`Grupp ${L[g]}: ${z} spelare`).join(" · ")}. När det blåses går varje grupp till nästa stationsnummer.`;
+
+  $("bookend").innerHTML=`
+    <div class="bk"><div class="when">0–${P.warm} min · Uppvärmning, hela laget</div><h3>${esc(P.warmup.name)}</h3><p>${esc(P.warmup.desc)}</p></div>
+    <div class="bk"><div class="when">${P.finStart}–${P.mins} min · Avslutning, hela laget</div><h3>${esc(P.finish.name)}</h3><p>${esc(P.finish.desc)}</p></div>`;
+  renderLib();
+  $("tbcount").textContent=DRILLS.length;
+  save();
+}
+
+const AREAS={net:"zon med mål",corner:"hörn",neutral:"mittzon"};
+const LIBZ={net:{x:0,y:0,w:75,h:85,type:"net"},corner:{x:0,y:42.5,w:75,h:42.5,type:"corner"},neutral:{x:75,y:0,w:50,h:85,type:"neutral"}};
+function libSVG(d){
+  const keep=S.ice;S.ice="full";
+  const z=Object.assign({},LIBZ[d.areas.includes("net")?"net":d.areas[0]]);
+  let out=stationSVG(Object.assign(z,{drill:d,goalie:z.type==="net"&&(FIG[d.id]||[]).some(e=>e[0]==="s"&&e.includes("N"))}),"L"+d.id).replace(/fill="var\(--s[0-9]\)"|fill="undefined"/g,'fill="var(--accent)"');
+  S.ice=keep;return out;
+}
+function renderLib(){
+  const nFav=DRILLS.filter(d=>S.fav.includes(d.id)).length, nNo=DRILLS.filter(d=>S.no.includes(d.id)).length;
+  const nHa=DRILLS.filter(d=>d.src).length;
+  $("libcount").innerHTML=`<div class="libnum"><span class="big">${DRILLS.length}</span> övningar i biblioteket</div>
+    <div class="libsub">${DRILLS.length-nHa} egna · ${nHa} från Hockeyakademin · ★ ${nFav} favorit${nFav===1?"":"er"} · ${nNo} bortvald${nNo===1?"":"a"}</div>
+    <div class="libcats">${Object.entries(CATS).map(([k,v])=>`<span class="tag">${v} ${DRILLS.filter(d=>d.cat===k).length}</span>`).join("")}</div>`;
+  ["all","fav","no"].forEach(k=>$("lib-"+k).setAttribute("aria-pressed",S.lib===k));
+  $("lib-fav").textContent=`★ Favoriter ${nFav}`;$("lib-no").textContent=`Bortvalda ${nNo}`;
+  let list=DRILLS.filter(d=>S.lib==="fav"?S.fav.includes(d.id):S.lib==="no"?S.no.includes(d.id):true);
+  const order=Object.keys(CATS);
+  list=list.slice().sort((a,b)=>order.indexOf(a.cat)-order.indexOf(b.cat)||a.name.localeCompare(b.name,"sv"));
+  $("liblist").innerHTML=list.length?list.map(d=>{
+    const f=S.fav.includes(d.id),no=S.no.includes(d.id),op=openLib.has(d.id);
+    return `<div class="lib-item${no?" off":""}">
+      <details data-lib="${d.id}"${op?" open":""}><summary><span class="ln">${esc(d.name)}</span>
+        <span class="lm">${CATS[d.cat]} · ${d.areas.map(a=>AREAS[a]).join(", ")} · minst ${d.min} spelare${d.coach?"":" · går utan tränare"}${d.src?" · Hockeyakademin":""}</span></summary>
+        <div class="lib-body">${op?libSVG(d):""}<p>${esc(d.desc)}</p><ul>${d.pts.map(p=>`<li>${esc(p)}</li>`).join("")}</ul>
+        ${d.src?`<a class="srclink" href="${d.src}" target="_blank" rel="noopener">Se originalet på Hockeyakademin ↗</a>`:""}</div></details>
+      <div class="lib-actions"><button type="button" class="star" data-fav="${d.id}" aria-pressed="${f}" aria-label="${f?"Ta bort från favoriter":"Spara som favorit"}">${f?"★":"☆"}</button>
+        <button type="button" class="nobtn" data-no="${d.id}" aria-pressed="${no}">${no?"Bortvald":"Föreslå inte"}</button></div>
+    </div>`;}).join(""):`<p class="empty">${S.lib==="fav"?"Inga favoriter ännu. Tryck på ☆ vid en övning för att spara den.":"Inga bortvalda övningar."}</p>`;
+}
+
+document.addEventListener("click",e=>{
+  const b=e.target.closest("button");if(!b)return;
+  if(b.dataset.step){const [k,d]=b.dataset.step.split(":");const el=$(k);S[k]=Math.max(+el.min,Math.min(+el.max,(S[k]|0)+(+d)));S.swaps={};S.pick={};render();}
+  else if(b.dataset.src){S.src=b.dataset.src;S.swaps={};S.pick={};render();}
+  else if(b.dataset.ice){S.ice=b.dataset.ice;S.swaps={};S.pick={};render();}
+  else if(b.dataset.len){S.mins=+b.dataset.len;render();}
+  else if(b.dataset.focus){const f=b.dataset.focus;S.focus=S.focus.includes(f)?S.focus.filter(x=>x!==f):S.focus.concat(f);S.swaps={};S.pick={};render();}
+  else if(b.dataset.swap!==undefined){const i=b.dataset.swap;S.swaps[i]=(S.swaps[i]||0)+1;render();}
+  else if(b.id==="shuffle"){S.seed=(S.seed||1)+1;S.swaps={};S.pick={};render();}
+  else if(b.dataset.fav){const id=b.dataset.fav;S.fav=S.fav.includes(id)?S.fav.filter(x=>x!==id):S.fav.concat(id);render();}
+  else if(b.dataset.no){const id=b.dataset.no;const on=!S.no.includes(id);S.no=on?S.no.concat(id):S.no.filter(x=>x!==id);
+    if(on){for(const k in S.pick)if(S.pick[k]===id)delete S.pick[k];if(b.dataset.st!==undefined)S.swaps[b.dataset.st]=0;}render();}
+  else if(b.dataset.tab){setTab(b.dataset.tab,true);}
+  else if(b.dataset.lib){S.lib=b.dataset.lib;render();}
+});
+["players","goalies","coaches"].forEach(k=>{
+  $(k).addEventListener("input",()=>{const v=parseInt($(k).value,10);if(!isNaN(v)){S[k]=Math.max(+$(k).min,Math.min(+$(k).max,v));S.swaps={};S.pick={};render();}});
+  $(k).addEventListener("blur",()=>{$(k).value=S[k];});
+});
+render();
+setTab(location.hash==="#bibliotek"?"lib":(S.tab||"setup"),false);
+})();
+</script>
+
+</body>
+</html>
